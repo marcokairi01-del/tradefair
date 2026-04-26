@@ -1,0 +1,3088 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no" />
+<meta name="theme-color" content="#f2f2f7" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Fair Capture" />
+<meta name="format-detection" content="telephone=no" />
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><defs><linearGradient id='g' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='%23007AFF'/><stop offset='1' stop-color='%230040C8'/></linearGradient></defs><rect width='180' height='180' rx='40' fill='url(%23g)'/><circle cx='90' cy='95' r='32' fill='none' stroke='white' stroke-width='8'/><rect x='66' y='52' width='48' height='12' rx='3' fill='white'/><circle cx='90' cy='95' r='14' fill='white'/></svg>" />
+<title>Fair Capture</title>
+<script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+<style>
+/* ============================================================
+   iOS Design System — Trade Fair Capture
+   ============================================================ */
+
+/* ---------- Tokens (light) ---------- */
+:root{
+  --systemBackground: #ffffff;
+  --secondarySystemBackground: #f2f2f7;
+  --tertiarySystemBackground: #ffffff;
+  --systemGroupedBackground: #f2f2f7;
+  --secondarySystemGroupedBackground: #ffffff;
+  --label: #000000;
+  --secondaryLabel: rgba(60,60,67,0.60);
+  --tertiaryLabel: rgba(60,60,67,0.30);
+  --quaternaryLabel: rgba(60,60,67,0.18);
+  --separator: rgba(60,60,67,0.29);
+  --opaqueSeparator: #c6c6c8;
+  --systemBlue: #007AFF;
+  --systemGreen: #34C759;
+  --systemRed: #FF3B30;
+  --systemOrange: #FF9500;
+  --systemYellow: #FFCC00;
+  --systemPurple: #AF52DE;
+  --systemPink: #FF2D55;
+  --systemIndigo: #5856D6;
+  --systemTeal: #5AC8FA;
+  --systemGray: #8E8E93;
+  --systemGray2: #AEAEB2;
+  --systemGray3: #C7C7CC;
+  --systemGray4: #D1D1D6;
+  --systemGray5: #E5E5EA;
+  --systemGray6: #F2F2F7;
+  --fill: rgba(120,120,128,0.20);
+  --fill2: rgba(120,120,128,0.16);
+  --fill3: rgba(118,118,128,0.12);
+  --fill4: rgba(116,116,128,0.08);
+  --tint: var(--systemBlue);
+  --nav-bg: rgba(249,249,249,0.94);
+  --tab-bg: rgba(249,249,249,0.92);
+  --modal-overlay: rgba(0,0,0,0.4);
+  --safe-top: env(safe-area-inset-top, 0);
+  --safe-bottom: env(safe-area-inset-bottom, 0);
+  --safe-left: env(safe-area-inset-left, 0);
+  --safe-right: env(safe-area-inset-right, 0);
+  --nav-h: 44px;
+  --large-title-h: 52px;
+  --tab-h: 49px;
+  --row-h: 44px;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --systemBackground: #000000;
+    --secondarySystemBackground: #1c1c1e;
+    --tertiarySystemBackground: #2c2c2e;
+    --systemGroupedBackground: #000000;
+    --secondarySystemGroupedBackground: #1c1c1e;
+    --label: #ffffff;
+    --secondaryLabel: rgba(235,235,245,0.60);
+    --tertiaryLabel: rgba(235,235,245,0.30);
+    --quaternaryLabel: rgba(235,235,245,0.16);
+    --separator: rgba(84,84,88,0.65);
+    --opaqueSeparator: #38383a;
+    --systemBlue: #0A84FF;
+    --systemGreen: #30D158;
+    --systemRed: #FF453A;
+    --systemOrange: #FF9F0A;
+    --systemYellow: #FFD60A;
+    --systemPurple: #BF5AF2;
+    --systemPink: #FF375F;
+    --systemIndigo: #5E5CE6;
+    --systemGray: #8E8E93;
+    --systemGray2: #636366;
+    --systemGray3: #48484A;
+    --systemGray4: #3A3A3C;
+    --systemGray5: #2C2C2E;
+    --systemGray6: #1C1C1E;
+    --fill: rgba(120,120,128,0.36);
+    --fill2: rgba(120,120,128,0.32);
+    --fill3: rgba(118,118,128,0.24);
+    --fill4: rgba(118,118,128,0.18);
+    --tint: var(--systemBlue);
+    --nav-bg: rgba(22,22,23,0.84);
+    --tab-bg: rgba(22,22,23,0.84);
+    --modal-overlay: rgba(0,0,0,0.55);
+  }
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+input,textarea,[contenteditable]{-webkit-user-select:auto;user-select:auto}
+html,body{
+  margin:0;padding:0;
+  background:var(--systemGroupedBackground);
+  color:var(--label);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Helvetica Neue",sans-serif;
+  font-size:17px;line-height:22px;letter-spacing:-0.011em;
+  overscroll-behavior-y:contain;
+  -webkit-font-smoothing:antialiased;
+}
+body{min-height:100vh;min-height:100dvh}
+button{background:none;border:0;cursor:pointer;padding:0;font:inherit;color:inherit}
+input,textarea,select{font:inherit;color:inherit}
+a{color:var(--tint);text-decoration:none}
+img{display:block;max-width:100%}
+
+/* ---------- App layout ---------- */
+.app{
+  min-height:100vh;min-height:100dvh;
+  padding-top:calc(var(--safe-top) + var(--nav-h));
+  padding-bottom:calc(var(--safe-bottom) + var(--tab-h));
+  padding-left:var(--safe-left);padding-right:var(--safe-right);
+  position:relative;
+}
+.app.has-large{padding-top:calc(var(--safe-top) + var(--nav-h) + var(--large-title-h))}
+.app.no-tab{padding-bottom:var(--safe-bottom)}
+
+/* ---------- Navigation Bar ---------- */
+.navbar{
+  position:fixed;top:0;left:0;right:0;z-index:60;
+  background:var(--nav-bg);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:0.5px solid transparent;
+  padding-top:var(--safe-top);
+  transition:border-color .15s ease;
+}
+.navbar.scrolled{border-bottom-color:var(--separator)}
+.nav-row{
+  height:var(--nav-h);
+  display:flex;align-items:center;
+  padding:0 8px;
+  position:relative;
+}
+.nav-title{
+  position:absolute;left:0;right:0;top:0;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;font-weight:600;letter-spacing:-0.011em;
+  color:var(--label);
+  pointer-events:none;
+  transition:opacity .15s ease;
+}
+.app.has-large .nav-title{opacity:0}
+.app.has-large.scrolled .nav-title{opacity:1}
+.nav-back, .nav-action{
+  min-width:32px;min-height:32px;
+  display:inline-flex;align-items:center;
+  padding:6px 8px;
+  font-size:17px;color:var(--tint);
+  letter-spacing:-0.011em;
+  cursor:pointer;
+  z-index:1;
+}
+.nav-back:active, .nav-action:active{opacity:.4}
+.nav-back svg{width:13px;height:21px;margin-inline-end:5px}
+.nav-action.bold{font-weight:600}
+.nav-spacer{flex:1}
+
+.large-title{
+  padding:6px 16px 8px;
+  font-size:34px;font-weight:700;letter-spacing:-0.022em;line-height:41px;
+  color:var(--label);
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  transition:transform .15s ease,opacity .15s ease;
+}
+.app.has-large.scrolled .large-title{transform:translateY(-100%);opacity:0;pointer-events:none}
+
+/* ---------- Tab Bar ---------- */
+.tabbar{
+  position:fixed;bottom:0;left:0;right:0;z-index:55;
+  background:var(--tab-bg);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  backdrop-filter:saturate(180%) blur(20px);
+  border-top:0.5px solid var(--separator);
+  padding-bottom:var(--safe-bottom);
+  display:grid;grid-template-columns:repeat(5,1fr);
+}
+.tab{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  height:var(--tab-h);
+  color:var(--systemGray);
+  font-size:10px;font-weight:500;letter-spacing:0.01em;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .08s ease;
+}
+.tab.active{color:var(--tint)}
+.tab:active{transform:scale(.94)}
+.tab svg{width:25px;height:25px;stroke-width:1.6;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.tab.active svg{stroke-width:2}
+.tab.center svg{width:34px;height:34px;stroke-width:1.4}
+
+/* ---------- Page transitions ---------- */
+.page{
+  animation:pageIn .28s cubic-bezier(.32,.72,.35,1);
+}
+.page-back{animation:pageBack .28s cubic-bezier(.32,.72,.35,1)}
+@keyframes pageIn{from{transform:translateX(-30px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes pageBack{from{transform:translateX(30px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* ---------- Lists / Inset Grouped ---------- */
+.list-section{margin:0 16px 22px}
+.list-section-header{
+  font-size:13px;letter-spacing:0;line-height:18px;
+  color:var(--secondaryLabel);
+  text-transform:uppercase;
+  padding:14px 4px 6px;
+  font-weight:400;
+}
+.list-section-footer{
+  font-size:13px;color:var(--secondaryLabel);
+  padding:6px 4px 0;
+  line-height:18px;
+}
+.list{
+  background:var(--secondarySystemGroupedBackground);
+  border-radius:10px;overflow:hidden;
+}
+.list-row{
+  min-height:var(--row-h);
+  padding:11px 16px;
+  display:flex;align-items:center;gap:12px;
+  position:relative;
+  color:var(--label);
+  font-size:17px;
+}
+.list-row + .list-row::before{
+  content:"";position:absolute;top:0;inset-inline-start:16px;inset-inline-end:0;
+  height:0.5px;background:var(--separator);
+}
+.list-row.tap{cursor:pointer}
+.list-row.tap:active{background:var(--fill4)}
+.list-row .lead-icon{
+  width:29px;height:29px;border-radius:7px;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:var(--systemBlue);color:#fff;
+  flex-shrink:0;
+}
+.list-row .lead-icon svg{width:18px;height:18px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.list-row .lead-icon.gray{background:var(--systemGray)}
+.list-row .lead-icon.green{background:var(--systemGreen)}
+.list-row .lead-icon.orange{background:var(--systemOrange)}
+.list-row .lead-icon.purple{background:var(--systemPurple)}
+.list-row .lead-icon.red{background:var(--systemRed)}
+.list-row .row-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.list-row .row-title{font-size:17px;letter-spacing:-0.011em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.list-row .row-sub{font-size:13px;color:var(--secondaryLabel);letter-spacing:-0.001em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.list-row .row-value{font-size:17px;color:var(--secondaryLabel)}
+.list-row .row-chev{color:var(--tertiaryLabel);flex-shrink:0}
+.list-row .row-chev svg{width:7px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.list-row .row-badge{
+  font-size:13px;color:#fff;background:var(--systemRed);
+  padding:1px 8px;border-radius:999px;font-weight:600;min-width:22px;text-align:center;
+}
+
+/* ---------- Form rows ---------- */
+.form-row{
+  min-height:var(--row-h);
+  padding:11px 16px;
+  display:flex;align-items:center;gap:12px;
+  position:relative;
+}
+.form-row + .form-row::before{
+  content:"";position:absolute;top:0;inset-inline-start:16px;inset-inline-end:0;
+  height:0.5px;background:var(--separator);
+}
+.form-row .flabel{
+  font-size:17px;color:var(--label);min-width:90px;flex-shrink:0;
+}
+.form-row .finput{
+  flex:1;background:transparent;border:0;outline:0;
+  font-size:17px;color:var(--label);
+  text-align:end;letter-spacing:-0.011em;
+  min-width:0;
+}
+.form-row .finput::placeholder{color:var(--tertiaryLabel)}
+.form-row.full{flex-direction:column;align-items:stretch;gap:6px;padding:11px 16px}
+.form-row.full .flabel{min-width:0}
+.form-row.full .finput{text-align:start}
+.form-row.full .ftext{
+  width:100%;background:transparent;border:0;outline:0;
+  font-size:17px;color:var(--label);min-height:80px;resize:vertical;
+  font-family:inherit;
+}
+
+/* ---------- Buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  height:50px;padding:0 18px;
+  border-radius:14px;
+  font-size:17px;font-weight:600;letter-spacing:-0.011em;
+  background:var(--tint);color:#fff;
+  transition:transform .08s ease,opacity .12s ease;
+  cursor:pointer;
+  width:100%;
+}
+.btn:active{transform:scale(.98);opacity:.85}
+.btn.tinted{background:rgba(0,122,255,0.15);color:var(--tint)}
+@media(prefers-color-scheme:dark){.btn.tinted{background:rgba(10,132,255,0.20)}}
+.btn.gray{background:var(--fill3);color:var(--label)}
+.btn.plain{background:transparent;color:var(--tint);font-weight:500}
+.btn.destructive{background:var(--systemRed);color:#fff}
+.btn.destructive-tinted{background:rgba(255,59,48,0.15);color:var(--systemRed)}
+.btn.compact{height:36px;font-size:15px;padding:0 14px;border-radius:10px;font-weight:500;width:auto}
+.btn.compact.dense{height:30px;font-size:13px;padding:0 12px;border-radius:8px}
+.btn-stack{display:flex;flex-direction:column;gap:10px;padding:0 16px}
+
+/* ---------- Cards / Tiles ---------- */
+.tile{
+  background:var(--secondarySystemGroupedBackground);
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 0 0 0.5px var(--separator);
+}
+.spacer-12{height:12px}
+.spacer-16{height:16px}
+.spacer-24{height:24px}
+.spacer-40{height:40px}
+
+/* ---------- Filters / Segmented ---------- */
+.segmented{
+  display:inline-flex;background:var(--fill3);
+  border-radius:9px;padding:2px;gap:0;
+  margin:0 16px 8px;width:calc(100% - 32px);
+}
+.segmented button{
+  flex:1;height:32px;font-size:13px;font-weight:500;letter-spacing:-0.001em;
+  color:var(--label);border-radius:7px;
+  transition:background .12s ease;
+}
+.segmented button[aria-pressed="true"]{
+  background:var(--secondarySystemBackground);
+  font-weight:600;
+  box-shadow:0 0 0 0.5px var(--separator),0 3px 8px rgba(0,0,0,0.04);
+}
+
+.chip-row{
+  display:flex;gap:8px;overflow-x:auto;padding:8px 16px 12px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.chip-row::-webkit-scrollbar{display:none}
+.chip{
+  flex-shrink:0;height:34px;padding:0 14px;border-radius:17px;
+  background:var(--fill3);color:var(--label);
+  font-size:14px;font-weight:500;
+  display:inline-flex;align-items:center;gap:5px;
+  white-space:nowrap;
+}
+.chip[aria-pressed="true"]{background:var(--tint);color:#fff}
+.chip:active{opacity:.7}
+
+/* ---------- Search ---------- */
+.search-wrap{padding:0 16px 8px}
+.search{
+  display:flex;align-items:center;gap:6px;
+  background:var(--fill3);border-radius:10px;padding:8px 10px;
+  height:36px;
+}
+.search svg{width:16px;height:16px;color:var(--secondaryLabel);stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+.search input{
+  flex:1;background:transparent;border:0;outline:0;
+  font-size:17px;color:var(--label);min-width:0;
+}
+.search input::placeholder{color:var(--secondaryLabel)}
+
+/* ---------- Product Gallery ---------- */
+.grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:12px;
+  padding:0 16px 12px;
+}
+@media(min-width:520px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:780px){.grid{grid-template-columns:repeat(4,1fr)}}
+.pcard{
+  position:relative;background:var(--secondarySystemGroupedBackground);
+  border-radius:12px;overflow:hidden;
+  display:flex;flex-direction:column;
+  box-shadow:0 0 0 0.5px var(--separator);
+  transition:transform .1s ease;cursor:pointer;
+}
+.pcard:active{transform:scale(.97)}
+.pcard .thumb{aspect-ratio:1;background:var(--fill4);position:relative}
+.pcard .thumb img{width:100%;height:100%;object-fit:cover}
+.pcard .noimg{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--tertiaryLabel);font-size:34px}
+.pcard .body{padding:9px 11px 11px}
+.pcard .price{font-size:15px;font-weight:600;letter-spacing:-0.011em}
+.pcard .meta{font-size:12px;color:var(--secondaryLabel);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pcard .badge-rating{
+  position:absolute;top:6px;inset-inline-end:6px;
+  background:rgba(0,0,0,0.7);color:#fff;
+  border-radius:999px;padding:2px 8px;font-size:11px;font-weight:600;
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+}
+.pcard .badge-cat{
+  position:absolute;bottom:6px;inset-inline-start:6px;
+  background:rgba(255,255,255,0.92);color:#000;
+  border-radius:999px;padding:2px 7px;font-size:10px;font-weight:600;
+}
+@media(prefers-color-scheme:dark){.pcard .badge-cat{background:rgba(60,60,60,0.92);color:#fff}}
+.pcard .badge-count{
+  position:absolute;top:6px;inset-inline-start:6px;
+  background:rgba(0,0,0,0.7);color:#fff;
+  border-radius:999px;padding:2px 6px;font-size:10px;font-weight:500;
+  display:inline-flex;align-items:center;gap:3px;
+}
+
+/* ---------- Empty state ---------- */
+.empty{
+  text-align:center;padding:60px 24px;
+  color:var(--secondaryLabel);
+}
+.empty .em-icon{
+  width:64px;height:64px;border-radius:14px;
+  background:var(--fill3);
+  display:inline-flex;align-items:center;justify-content:center;
+  margin-bottom:16px;color:var(--secondaryLabel);
+}
+.empty .em-icon svg{width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.empty h2{font-size:22px;font-weight:600;margin:0 0 6px;color:var(--label);letter-spacing:-0.018em}
+.empty p{margin:0 0 24px;max-width:280px;margin-inline:auto;font-size:15px;line-height:20px}
+.empty .btn{max-width:280px;margin-inline:auto}
+
+/* ---------- Banner (active session) ---------- */
+.banner{
+  position:fixed;
+  top:calc(var(--safe-top) + var(--nav-h));
+  left:0;right:0;z-index:55;
+  background:var(--tint);color:#fff;
+  padding:8px 16px;
+  display:flex;align-items:center;gap:10px;justify-content:space-between;
+  font-size:14px;font-weight:500;
+  box-shadow:0 4px 20px rgba(0,122,255,0.25);
+}
+.app.has-banner{padding-top:calc(var(--safe-top) + var(--nav-h) + 38px)}
+.app.has-banner.has-large{padding-top:calc(var(--safe-top) + var(--nav-h) + var(--large-title-h) + 38px)}
+.banner-meta{font-size:12px;opacity:.85;font-weight:400}
+.banner-actions{display:flex;gap:6px;flex-shrink:0}
+.banner-actions button{
+  background:rgba(255,255,255,0.20);color:#fff;
+  border-radius:999px;padding:5px 12px;font-size:13px;font-weight:600;
+}
+.banner-actions button:active{background:rgba(255,255,255,0.32)}
+
+/* ---------- Photo capture ---------- */
+.photo-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+  padding:0 16px 4px;
+}
+.photo-slot{
+  aspect-ratio:1;background:var(--fill3);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  color:var(--secondaryLabel);
+}
+.photo-slot.has{background:var(--systemGray6)}
+.photo-slot img{width:100%;height:100%;object-fit:cover}
+.photo-slot input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+.photo-slot .add-icn{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--secondaryLabel)}
+.photo-slot .add-icn svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.photo-slot .remove-x{
+  position:absolute;top:4px;inset-inline-end:4px;
+  width:26px;height:26px;border-radius:50%;
+  background:rgba(0,0,0,0.7);color:#fff;
+  display:inline-flex;align-items:center;justify-content:center;
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  z-index:2;
+}
+.photo-slot .remove-x svg{width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.photo-slot .main-flag{
+  position:absolute;bottom:4px;inset-inline-start:4px;
+  background:rgba(255,255,255,0.92);color:#000;
+  font-size:10px;font-weight:600;padding:2px 6px;border-radius:999px;
+  z-index:2;
+}
+
+.bigphoto{
+  margin:0 16px;
+  aspect-ratio:16/10;background:var(--fill3);border-radius:14px;
+  position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--secondaryLabel);
+}
+.bigphoto.has{background:#000}
+.bigphoto img{width:100%;height:100%;object-fit:contain}
+.bigphoto input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer}
+.bigphoto .add-block{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:14px;font-weight:500}
+.bigphoto .add-block svg{width:28px;height:28px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- Product detail gallery ---------- */
+.detail-photo{
+  margin:0 16px;border-radius:14px;overflow:hidden;background:#000;
+  aspect-ratio:1;
+}
+.detail-photo img{width:100%;height:100%;object-fit:contain}
+.detail-photo .ph-empty{height:100%;display:flex;align-items:center;justify-content:center;font-size:48px;color:#444}
+.detail-thumbs{display:flex;gap:8px;padding:10px 16px;overflow-x:auto;scrollbar-width:none}
+.detail-thumbs::-webkit-scrollbar{display:none}
+.detail-thumbs button{
+  width:60px;height:60px;border-radius:8px;overflow:hidden;flex-shrink:0;
+  border:2px solid transparent;background:var(--fill4);
+}
+.detail-thumbs img{width:100%;height:100%;object-fit:cover}
+.detail-thumbs button[aria-current="true"]{border-color:var(--tint)}
+
+/* ---------- Stars ---------- */
+.stars{display:flex;gap:6px;justify-content:center;padding:4px 0}
+.stars button{
+  width:38px;height:38px;display:inline-flex;align-items:center;justify-content:center;
+  font-size:24px;color:var(--systemGray3);
+  transition:transform .08s ease;
+}
+.stars button.on{color:var(--systemOrange)}
+.stars button:active{transform:scale(.85)}
+
+.rating-big{display:flex;gap:8px;justify-content:center;padding:8px 16px}
+.rating-big button{
+  flex:1;height:60px;border-radius:14px;
+  background:var(--secondarySystemBackground);
+  font-size:22px;font-weight:600;color:var(--label);
+  box-shadow:0 0 0 0.5px var(--separator);
+  display:inline-flex;align-items:center;justify-content:center;
+}
+.rating-big button.on{background:var(--tint);color:#fff;box-shadow:none}
+.rating-big button:active{transform:scale(.95)}
+
+/* ---------- Pills / Badges ---------- */
+.pill{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:13px;font-weight:600;letter-spacing:-0.001em;
+  padding:3px 10px;border-radius:999px;
+  background:var(--fill3);color:var(--label);
+}
+.pill.blue{background:rgba(0,122,255,0.15);color:var(--tint)}
+.pill.green{background:rgba(52,199,89,0.18);color:var(--systemGreen)}
+.pill.orange{background:rgba(255,149,0,0.18);color:var(--systemOrange)}
+.pill.red{background:rgba(255,59,48,0.18);color:var(--systemRed)}
+.pill.gray{background:var(--fill3);color:var(--secondaryLabel)}
+.pill.dark{background:var(--label);color:var(--systemBackground)}
+
+/* ---------- Action sheet ---------- */
+.sheet-bg{
+  position:fixed;inset:0;z-index:200;
+  background:var(--modal-overlay);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  animation:fadeIn .25s ease;
+  padding:0 8px calc(8px + var(--safe-bottom));
+}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.sheet{
+  background:var(--secondarySystemBackground);
+  border-radius:14px;
+  overflow:hidden;
+  animation:sheetUp .3s cubic-bezier(.32,.72,.35,1);
+  box-shadow:0 -2px 30px rgba(0,0,0,0.2);
+}
+@keyframes sheetUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.sheet-cancel{
+  margin-top:8px;background:var(--secondarySystemBackground);
+  border-radius:14px;height:57px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:600;color:var(--tint);
+}
+.sheet-cancel:active{background:var(--fill4)}
+.sheet-action{
+  height:57px;display:flex;align-items:center;justify-content:center;
+  font-size:20px;color:var(--tint);
+  position:relative;
+}
+.sheet-action + .sheet-action::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:0.5px;background:var(--separator);
+}
+.sheet-action.destructive{color:var(--systemRed)}
+.sheet-action:active{background:var(--fill4)}
+.sheet-action.bold{font-weight:600}
+.sheet-title{
+  padding:14px 20px;font-size:13px;color:var(--secondaryLabel);text-align:center;
+  position:relative;
+}
+.sheet-title + .sheet-action::before{
+  content:"";position:absolute;top:0;left:0;right:0;height:0.5px;background:var(--separator);
+}
+
+/* ---------- Modal (form sheet) ---------- */
+.modal-bg{
+  position:fixed;inset:0;z-index:210;
+  background:var(--modal-overlay);
+  display:flex;align-items:flex-end;justify-content:center;
+  animation:fadeIn .25s ease;
+}
+@media(min-width:560px){.modal-bg{align-items:center;padding:20px}}
+.modal{
+  width:100%;max-width:560px;max-height:92vh;
+  background:var(--secondarySystemBackground);
+  border-radius:14px 14px 0 0;
+  display:flex;flex-direction:column;
+  animation:sheetUp .3s cubic-bezier(.32,.72,.35,1);
+  overflow:hidden;
+}
+@media(min-width:560px){.modal{border-radius:14px;max-height:80vh}}
+.modal-head{
+  padding:14px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:0.5px solid var(--separator);
+}
+.modal-head h2{margin:0;font-size:17px;font-weight:600;letter-spacing:-0.011em}
+.modal-head button{font-size:17px;color:var(--tint);padding:4px 8px;letter-spacing:-0.011em}
+.modal-head button.bold{font-weight:600}
+.modal-body{flex:1;overflow-y:auto;padding:16px 0;background:var(--systemGroupedBackground)}
+
+/* ---------- Toast ---------- */
+.toast{
+  position:fixed;
+  bottom:calc(var(--tab-h) + var(--safe-bottom) + 16px);
+  left:50%;transform:translateX(-50%);
+  background:rgba(60,60,67,0.94);color:#fff;
+  -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);
+  padding:11px 18px;border-radius:999px;
+  font-size:14px;font-weight:500;letter-spacing:-0.001em;
+  box-shadow:0 8px 30px rgba(0,0,0,0.25);
+  z-index:300;max-width:calc(100vw - 40px);
+  animation:toastIn .3s cubic-bezier(.32,.72,.35,1);
+}
+@keyframes toastIn{from{transform:translateX(-50%) translateY(20px);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}
+
+/* ---------- Stat grid ---------- */
+.stat-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:10px;
+  padding:0 16px;
+}
+.stat{
+  background:var(--secondarySystemGroupedBackground);
+  border-radius:14px;padding:14px;
+  box-shadow:0 0 0 0.5px var(--separator);
+}
+.stat .num{font-size:28px;font-weight:700;letter-spacing:-0.018em;line-height:34px}
+.stat .lab{font-size:13px;color:var(--secondaryLabel);margin-top:2px;letter-spacing:-0.001em}
+
+/* ---------- Supplier rows ---------- */
+.supplier-row{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 16px;
+  position:relative;
+}
+.supplier-row + .supplier-row::before{
+  content:"";position:absolute;top:0;inset-inline-start:80px;inset-inline-end:16px;
+  height:0.5px;background:var(--separator);
+}
+.savatar{
+  width:52px;height:52px;border-radius:14px;
+  background:var(--fill3);overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--secondaryLabel);font-weight:600;font-size:20px;
+  flex-shrink:0;
+}
+.savatar img{width:100%;height:100%;object-fit:cover}
+.sinfo{flex:1;min-width:0}
+.sname{font-size:17px;font-weight:600;letter-spacing:-0.011em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.smeta{font-size:13px;color:var(--secondaryLabel);margin-top:2px;display:flex;gap:8px;flex-wrap:wrap}
+
+/* ---------- Review mode ---------- */
+.review-card{
+  margin:0 16px;
+  background:var(--secondarySystemGroupedBackground);
+  border-radius:18px;overflow:hidden;
+  box-shadow:0 0 0 0.5px var(--separator);
+  transition:transform .25s cubic-bezier(.32,.72,.35,1),opacity .25s ease;
+}
+.review-card.swipe-left{transform:translateX(-120%) rotate(-8deg);opacity:0}
+.review-card.swipe-right{transform:translateX(120%) rotate(8deg);opacity:0}
+.review-img{aspect-ratio:1;background:#000;position:relative;overflow:hidden}
+.review-img img{width:100%;height:100%;object-fit:contain}
+.review-info{padding:14px 16px}
+.review-progress{
+  padding:8px 16px 4px;display:flex;justify-content:space-between;
+  font-size:13px;color:var(--secondaryLabel);
+}
+.review-progress-bar{
+  height:3px;background:var(--fill3);border-radius:999px;margin:0 16px 6px;overflow:hidden;
+}
+.review-progress-bar > div{height:100%;background:var(--tint);transition:width .3s ease}
+
+/* ---------- Detail rows / KV ---------- */
+.kv{display:flex;flex-direction:column}
+.kv .kv-row{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:11px 16px;min-height:44px;position:relative;
+}
+.kv .kv-row + .kv-row::before{
+  content:"";position:absolute;top:0;inset-inline-start:16px;inset-inline-end:0;
+  height:0.5px;background:var(--separator);
+}
+.kv .kv-key{font-size:17px;color:var(--label)}
+.kv .kv-val{font-size:17px;color:var(--secondaryLabel);text-align:end;letter-spacing:-0.011em}
+.kv .kv-val a{color:var(--tint)}
+.kv .kv-row.tap{cursor:pointer}
+.kv .kv-row.tap:active{background:var(--fill4)}
+
+/* ---------- Misc ---------- */
+.padded{padding:0 16px}
+.muted{color:var(--secondaryLabel);font-size:14px}
+.danger-zone{padding:0 16px}
+
+/* ---------- Loading ---------- */
+.spinner{
+  width:20px;height:20px;border:2.5px solid var(--fill);border-top-color:var(--tint);
+  border-radius:50%;animation:spin .9s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ============================================================
+   Document Scanner
+   ============================================================ */
+.scan-bg{
+  position:fixed;inset:0;z-index:300;
+  background:#000;
+  display:flex;flex-direction:column;
+  animation:fadeIn .25s ease;
+}
+.scan-stage{
+  flex:1;position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  touch-action:none;-webkit-user-select:none;user-select:none;
+}
+.scan-stage canvas{display:block;background:#000}
+.scan-stage svg{
+  position:absolute;
+  pointer-events:none;
+  overflow:visible;
+}
+.scan-corner{
+  position:absolute;
+  width:44px;height:44px;
+  margin-left:-22px;margin-top:-22px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.96);
+  box-shadow:0 0 0 2px var(--tint),0 4px 14px rgba(0,0,0,0.5);
+  cursor:grab;
+  z-index:6;
+  touch-action:none;
+}
+.scan-corner::before{
+  content:"";position:absolute;inset:13px;
+  border-radius:50%;background:var(--tint);
+}
+.scan-corner.dragging{
+  cursor:grabbing;
+  transform:scale(1.18);
+  box-shadow:0 0 0 3px var(--tint),0 6px 20px rgba(0,0,0,0.6);
+}
+.scan-bar{
+  background:#000;
+  padding:14px 16px calc(14px + var(--safe-bottom));
+  display:flex;align-items:center;gap:10px;
+  border-top:0.5px solid rgba(255,255,255,0.12);
+}
+.scan-bar > button{
+  font-size:17px;color:#fff;
+  padding:10px 16px;border-radius:10px;
+  background:rgba(255,255,255,0.12);
+  font-weight:500;letter-spacing:-0.011em;
+}
+.scan-bar > button:active{background:rgba(255,255,255,0.22)}
+.scan-bar > button.primary{
+  background:var(--tint);font-weight:600;
+  padding:10px 22px;
+}
+.scan-filters{
+  flex:1;display:flex;justify-content:center;gap:4px;
+  background:rgba(255,255,255,0.10);
+  border-radius:10px;padding:3px;
+}
+.scan-filters button{
+  flex:1;max-width:96px;
+  padding:7px 10px;font-size:13px;
+  background:transparent;color:#fff;
+  border-radius:7px;font-weight:500;
+}
+.scan-filters button.active{
+  background:rgba(255,255,255,0.22);font-weight:600;
+}
+.scan-progress{
+  position:absolute;inset:0;z-index:7;
+  background:rgba(0,0,0,0.75);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:14px;color:#fff;font-size:14px;
+}
+.scan-progress .spinner{width:32px;height:32px;border-width:3px;border-color:rgba(255,255,255,0.2);border-top-color:#fff}
+.scan-hint{
+  position:absolute;top:16px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,0.6);color:#fff;
+  padding:8px 14px;border-radius:999px;
+  font-size:13px;letter-spacing:-0.001em;
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  z-index:5;pointer-events:none;
+  animation:hintFade .35s ease;
+}
+@keyframes hintFade{from{opacity:0;transform:translateX(-50%) translateY(-6px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+@media (min-width:768px){
+  .scan-corner{width:50px;height:50px;margin-left:-25px;margin-top:-25px}
+  .scan-corner::before{inset:15px}
+  .scan-bar{padding:18px 24px calc(18px + var(--safe-bottom))}
+  .scan-bar > button{font-size:18px;padding:12px 20px}
+  .scan-filters button{font-size:14px;padding:8px 14px;max-width:120px}
+  .scan-hint{font-size:14px;padding:9px 16px;top:20px}
+}
+
+/* ============================================================
+   Responsive — iPad / tablets (768px+)
+   Same code, bigger layout, no JS changes.
+   ============================================================ */
+@media (min-width: 768px){
+  :root{
+    --nav-h:50px;
+    --large-title-h:60px;
+    --tab-h:60px;
+    --row-h:48px;
+  }
+  body{font-size:18px;line-height:24px}
+
+  /* Centered content with max-width — keeps lines readable on wide screens */
+  .navbar > .nav-row{
+    max-width:900px;margin-inline:auto;
+  }
+  .large-title{
+    max-width:900px;margin-inline:auto;
+    padding:10px 28px 12px;
+    font-size:42px;line-height:48px;
+  }
+  .tabbar{
+    max-width:900px;margin-inline:auto;
+    border-left:0.5px solid var(--separator);
+    border-right:0.5px solid var(--separator);
+  }
+  .banner{padding:11px 28px;font-size:15px}
+  .app.has-banner{padding-top:calc(var(--safe-top) + var(--nav-h) + 42px)}
+  .app.has-banner.has-large{padding-top:calc(var(--safe-top) + var(--nav-h) + var(--large-title-h) + 42px)}
+
+  /* Tab bar — bigger touch targets and labels */
+  .tab svg{width:28px;height:28px}
+  .tab.center svg{width:38px;height:38px}
+  .tab span{font-size:11px}
+  .tab{font-size:11px}
+
+  /* Nav row */
+  .nav-row{padding:0 16px}
+  .nav-back, .nav-action{font-size:18px;padding:6px 12px}
+  .nav-back svg{width:14px;height:23px}
+  .nav-title{font-size:18px}
+
+  /* Lists wider but capped for readability */
+  .list-section{margin:0 auto 26px;max-width:760px;padding:0 28px}
+  .list-section.full{max-width:none;padding:0 28px}
+  .list{box-shadow:0 0 0 0.5px var(--separator),0 1px 3px rgba(0,0,0,0.04)}
+  .list-row{padding:13px 20px;font-size:18px}
+  .list-row .row-title{font-size:18px}
+  .list-row .row-sub{font-size:14px}
+  .list-row .row-value{font-size:18px}
+
+  /* Forms */
+  .form-row{padding:13px 20px}
+  .form-row .flabel{font-size:18px;min-width:110px}
+  .form-row .finput{font-size:18px}
+  .form-row.full .ftext{min-height:120px;font-size:18px}
+
+  /* Search / segmented / chips — centered, max-width */
+  .search-wrap{max-width:760px;margin-inline:auto;padding:0 28px 10px}
+  .search{height:42px;padding:10px 14px}
+  .search input{font-size:18px}
+  .search svg{width:18px;height:18px}
+  .segmented{max-width:760px;margin:0 auto 10px;width:calc(100% - 56px)}
+  .segmented button{height:36px;font-size:14px}
+  .chip-row{padding:10px 28px 16px;justify-content:flex-start}
+  .chip{height:38px;padding:0 16px;font-size:15px;border-radius:19px}
+
+  /* Product gallery — 5 columns on iPad portrait */
+  .grid{
+    grid-template-columns:repeat(5,1fr);
+    gap:16px;padding:0 28px 16px;
+  }
+  .pcard .body{padding:11px 13px 13px}
+  .pcard .price{font-size:16px}
+  .pcard .meta{font-size:13px}
+  .pcard .badge-rating{font-size:12px;padding:3px 9px}
+  .pcard .badge-cat{font-size:11px;padding:3px 8px}
+
+  /* Photo capture grid — 6 columns (instead of 3) */
+  .photo-grid{
+    grid-template-columns:repeat(6,1fr);
+    gap:10px;padding:0 28px 6px;
+  }
+  /* Big photo (business card) — capped width, taller */
+  .bigphoto{
+    margin:0 auto;
+    max-width:760px;
+    width:calc(100% - 56px);
+  }
+  .bigphoto .add-block{font-size:15px}
+  .bigphoto .add-block svg{width:32px;height:32px}
+
+  /* Stat grid — 4 columns instead of 2 */
+  .stat-grid{
+    grid-template-columns:repeat(4,1fr);
+    max-width:760px;margin-inline:auto;padding:0 28px;gap:14px;
+  }
+  .stat{padding:18px}
+  .stat .num{font-size:32px;line-height:38px}
+  .stat .lab{font-size:14px}
+
+  /* Suppliers list */
+  .supplier-row{padding:14px 28px}
+  .supplier-row + .supplier-row::before{inset-inline-start:96px;inset-inline-end:28px}
+  .savatar{width:60px;height:60px;font-size:24px;border-radius:16px}
+  .sname{font-size:18px}
+  .smeta{font-size:14px}
+
+  /* Product detail */
+  .detail-photo{
+    margin:0 auto;
+    max-width:600px;
+    width:calc(100% - 56px);
+  }
+  .detail-thumbs{padding:14px 28px;justify-content:center}
+  .detail-thumbs button{width:72px;height:72px;border-radius:10px}
+
+  /* KV rows */
+  .kv .kv-row{padding:13px 20px;min-height:48px}
+  .kv .kv-key{font-size:18px}
+  .kv .kv-val{font-size:18px}
+
+  /* Stars */
+  .stars{padding:8px 0;gap:8px}
+  .stars button{width:48px;height:48px;font-size:30px}
+  .rating-big{padding:10px 28px;max-width:760px;margin-inline:auto;gap:10px}
+  .rating-big button{height:68px;font-size:24px;border-radius:16px}
+
+  /* Review mode */
+  .review-card{
+    margin:0 auto;
+    max-width:560px;
+    border-radius:22px;
+  }
+  .review-progress{
+    max-width:560px;margin-inline:auto;
+    padding:14px 0 6px;font-size:14px;
+  }
+  .review-progress-bar{
+    max-width:560px;margin:0 auto 10px;height:4px;
+  }
+  .review-info{padding:18px 22px}
+
+  /* Buttons */
+  .btn{height:54px;font-size:18px;border-radius:14px}
+  .btn-stack{padding:0 28px;max-width:480px;margin-inline:auto}
+  .btn.compact{height:38px;font-size:15px}
+
+  /* Padded helpers */
+  .padded{padding:0 28px;max-width:760px;margin-inline:auto}
+  .danger-zone{padding:0 28px;max-width:760px;margin-inline:auto}
+
+  /* Empty state */
+  .empty{padding:90px 28px}
+  .empty .em-icon{width:80px;height:80px;border-radius:18px}
+  .empty .em-icon svg{width:40px;height:40px}
+  .empty h2{font-size:26px}
+  .empty p{font-size:17px;max-width:360px}
+  .empty .btn{max-width:340px}
+
+  /* Toast */
+  .toast{font-size:15px;padding:13px 22px}
+
+  /* Modal already responsive at 560px+, just refine */
+  .modal{max-width:600px;max-height:84vh}
+  .modal-head{padding:16px 22px}
+  .modal-head h2{font-size:18px}
+
+  /* Section header / footer */
+  .list-section-header{font-size:14px;padding:16px 4px 8px}
+  .list-section-footer{font-size:14px}
+
+  /* Pills */
+  .pill{font-size:14px;padding:4px 12px}
+}
+
+/* Larger iPad / iPad Pro 11" portrait, 12.9" portrait */
+@media (min-width: 1024px){
+  .navbar > .nav-row{max-width:1000px}
+  .large-title{max-width:1000px;padding:10px 32px 12px}
+  .tabbar{max-width:1000px}
+
+  /* Product gallery — 6 columns */
+  .grid{
+    grid-template-columns:repeat(6,1fr);
+    gap:18px;padding:0 32px 18px;
+  }
+  /* Photo capture — 8 columns */
+  .photo-grid{
+    grid-template-columns:repeat(8,1fr);
+    gap:12px;padding:0 32px 6px;
+  }
+
+  /* Wider content blocks */
+  .list-section{max-width:840px;padding:0 32px}
+  .stat-grid{max-width:840px;padding:0 32px}
+  .search-wrap{max-width:840px;padding:0 32px 10px}
+  .segmented{max-width:840px;width:calc(100% - 64px)}
+  .padded, .danger-zone{max-width:840px;padding:0 32px}
+  .chip-row{padding:10px 32px 16px}
+  .rating-big{max-width:840px;padding:10px 32px}
+  .bigphoto{max-width:840px;width:calc(100% - 64px)}
+  .detail-photo{max-width:680px;width:calc(100% - 64px)}
+  .detail-thumbs{padding:14px 32px}
+  .supplier-row{padding:14px 32px}
+  .supplier-row + .supplier-row::before{inset-inline-start:108px;inset-inline-end:32px}
+
+  /* Bigger review card */
+  .review-card{max-width:640px}
+  .review-progress, .review-progress-bar{max-width:640px}
+
+  /* Modal a bit wider on iPad Pro */
+  .modal{max-width:640px}
+}
+
+/* iPad Pro 12.9" landscape and Mac */
+@media (min-width: 1280px){
+  .grid{grid-template-columns:repeat(6,1fr);max-width:1200px;margin-inline:auto;gap:20px}
+  .photo-grid{max-width:900px;margin-inline:auto;padding:0 0 6px}
+}
+
+</style>
+</head>
+<body>
+
+<header class="navbar" id="navbar"></header>
+<div id="banner-host"></div>
+<div class="app" id="app-root">
+  <main id="app"></main>
+</div>
+
+<nav class="tabbar" id="tabbar">
+  <button class="tab" data-tab="gallery">
+    <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+    <span>מוצרים</span>
+  </button>
+  <button class="tab" data-tab="suppliers">
+    <svg viewBox="0 0 24 24"><path d="M3 21v-1.5a4.5 4.5 0 0 1 4.5-4.5h9a4.5 4.5 0 0 1 4.5 4.5V21"/><circle cx="12" cy="7.5" r="4"/></svg>
+    <span>ספקים</span>
+  </button>
+  <button class="tab center" data-tab="capture">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.5"/><path d="M12 8v8M8 12h8" stroke-linecap="round"/></svg>
+    <span>תפיסה</span>
+  </button>
+  <button class="tab" data-tab="review">
+    <svg viewBox="0 0 24 24"><path d="M12 2.5l2.95 6.18 6.55.85-4.84 4.65 1.23 6.66L12 17.6l-5.89 3.24 1.23-6.66L2.5 9.53l6.55-.85L12 2.5z"/></svg>
+    <span>ביקורת</span>
+  </button>
+  <button class="tab" data-tab="summary">
+    <svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 6-7"/></svg>
+    <span>סיכום</span>
+  </button>
+</nav>
+
+<script>
+"use strict";
+
+/* ============================================================
+   IndexedDB
+   ============================================================ */
+const DB_NAME = "tradefair_ios";
+const DB_VER  = 1;
+let dbp = null;
+function openDB(){
+  if (dbp) return dbp;
+  dbp = new Promise((res,rej)=>{
+    const r = indexedDB.open(DB_NAME, DB_VER);
+    r.onupgradeneeded = e=>{
+      const db = e.target.result;
+      if(!db.objectStoreNames.contains("suppliers")){
+        const s = db.createObjectStore("suppliers",{keyPath:"id"});
+        s.createIndex("date","dateAdded");
+      }
+      if(!db.objectStoreNames.contains("products")){
+        const p = db.createObjectStore("products",{keyPath:"id"});
+        p.createIndex("supplier","supplierId");
+        p.createIndex("date","dateAdded");
+        p.createIndex("category","category");
+        p.createIndex("rating","reviewRating");
+      }
+      if(!db.objectStoreNames.contains("sessions")){
+        db.createObjectStore("sessions",{keyPath:"id"}).createIndex("date","dateAdded");
+      }
+      if(!db.objectStoreNames.contains("kv")) db.createObjectStore("kv",{keyPath:"k"});
+    };
+    r.onsuccess = ()=>res(r.result);
+    r.onerror   = ()=>rej(r.error);
+  });
+  return dbp;
+}
+async function tx(stores, mode, fn){
+  const db = await openDB();
+  return new Promise((res,rej)=>{
+    const t = db.transaction(stores, mode);
+    const out = fn(t);
+    t.oncomplete = ()=>res(out);
+    t.onerror = ()=>rej(t.error);
+    t.onabort = ()=>rej(t.error);
+  });
+}
+const idb = {
+  put: (s,o)=> tx([s],"readwrite", t=>{ t.objectStore(s).put(o); return o; }),
+  get: (s,id)=> tx([s],"readonly", t=>new Promise(r=>{const x=t.objectStore(s).get(id);x.onsuccess=()=>r(x.result||null)})),
+  del: (s,id)=> tx([s],"readwrite", t=>{ t.objectStore(s).delete(id); }),
+  all: (s)=> tx([s],"readonly", t=>new Promise(r=>{const x=t.objectStore(s).getAll();x.onsuccess=()=>r(x.result||[])})),
+  clear: (s)=> tx([s],"readwrite", t=>{ t.objectStore(s).clear(); }),
+};
+
+/* ============================================================
+   Utils
+   ============================================================ */
+const uid = ()=> Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+const $   = (sel,r=document)=> r.querySelector(sel);
+const $$  = (sel,r=document)=> [...r.querySelectorAll(sel)];
+const byId= id=> document.getElementById(id);
+const esc = s => (s==null?"":String(s)).replace(/[&<>"']/g, c=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[c]));
+const nl2br = s => esc(s).replace(/\n/g,"<br>");
+const fmtDate = ts => { if(!ts) return ""; const d=new Date(ts);return d.toLocaleDateString("he-IL",{day:"2-digit",month:"2-digit",year:"2-digit"})+" "+d.toLocaleTimeString("he-IL",{hour:"2-digit",minute:"2-digit"}); };
+const today = ()=>{const d=new Date();d.setHours(0,0,0,0);return d.getTime();};
+const isToday = ts=> ts>=today();
+
+function haptic(type="selection"){
+  // iOS doesn't expose haptic from web (yet) but vibrate works on some Android.
+  if (!navigator.vibrate) return;
+  const map = { selection:[8], success:[5,40,20], warn:[10,30,10], error:[40,20,40] };
+  navigator.vibrate(map[type]||[8]);
+}
+
+function toast(msg, ms=1700){
+  const t = document.createElement("div");
+  t.className = "toast"; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), ms);
+}
+
+/* ============================================================
+   Photo resize
+   ============================================================ */
+function resizePhoto(file, maxDim=1400, q=.8){
+  return new Promise((res,rej)=>{
+    if (!file) return rej("no file");
+    const r = new FileReader();
+    r.onerror = rej;
+    r.onload = ()=>{
+      const img = new Image();
+      img.onerror = rej;
+      img.onload = ()=>{
+        let {width:w, height:h} = img;
+        const ratio = Math.min(1, maxDim/Math.max(w,h));
+        w = Math.round(w*ratio); h = Math.round(h*ratio);
+        const c = document.createElement("canvas");
+        c.width = w; c.height = h;
+        c.getContext("2d").drawImage(img,0,0,w,h);
+        res(c.toDataURL("image/jpeg", q));
+      };
+      img.src = r.result;
+    };
+    r.readAsDataURL(file);
+  });
+}
+
+/* ============================================================
+   Document Scanner — manual 4-corner perspective correction
+   ============================================================ */
+
+/* Solve 8x8 linear system Ax=B by Gauss-Jordan with partial pivoting.
+   Returns x as Float64Array(8) or null if singular. */
+function solveLinear(A, B){
+  const n = 8;
+  const M = new Float64Array(n*9);
+  for (let i=0;i<n;i++){
+    for (let j=0;j<n;j++) M[i*9+j] = A[i*n+j];
+    M[i*9+8] = B[i];
+  }
+  for (let i=0;i<n;i++){
+    let piv = i, max = Math.abs(M[i*9+i]);
+    for (let r=i+1;r<n;r++){
+      const v = Math.abs(M[r*9+i]);
+      if (v > max){ max = v; piv = r; }
+    }
+    if (max < 1e-12) return null;
+    if (piv !== i){
+      for (let c=i;c<=n;c++){
+        const t = M[i*9+c]; M[i*9+c] = M[piv*9+c]; M[piv*9+c] = t;
+      }
+    }
+    const inv = 1 / M[i*9+i];
+    for (let c=i;c<=n;c++) M[i*9+c] *= inv;
+    for (let r=0;r<n;r++){
+      if (r===i) continue;
+      const f = M[r*9+i];
+      if (f===0) continue;
+      for (let c=i;c<=n;c++) M[r*9+c] -= f * M[i*9+c];
+    }
+  }
+  const x = new Float64Array(n);
+  for (let i=0;i<n;i++) x[i] = M[i*9+8];
+  return x;
+}
+
+/* Compute homography H (3x3) that maps src[i]->dst[i], i=0..3.
+   Each point pair gives 2 equations. Returns Float64Array(9) or null. */
+function computeHomography(src, dst){
+  const A = new Float64Array(64);
+  const B = new Float64Array(8);
+  for (let i=0;i<4;i++){
+    const x = src[i].x, y = src[i].y, X = dst[i].x, Y = dst[i].y;
+    const r1 = i*2, r2 = i*2+1;
+    A[r1*8+0]=x; A[r1*8+1]=y; A[r1*8+2]=1;
+    A[r1*8+3]=0; A[r1*8+4]=0; A[r1*8+5]=0;
+    A[r1*8+6]=-x*X; A[r1*8+7]=-y*X;
+    B[r1]=X;
+    A[r2*8+0]=0; A[r2*8+1]=0; A[r2*8+2]=0;
+    A[r2*8+3]=x; A[r2*8+4]=y; A[r2*8+5]=1;
+    A[r2*8+6]=-x*Y; A[r2*8+7]=-y*Y;
+    B[r2]=Y;
+  }
+  const h = solveLinear(A, B);
+  if (!h) return null;
+  return new Float64Array([h[0],h[1],h[2],h[3],h[4],h[5],h[6],h[7],1]);
+}
+
+/* Apply inverse homography to sample source image into output of size outW x outH.
+   srcImgData: ImageData of source. H maps src->dst, so we invert and sample. */
+function applyHomography(srcImgData, H, outW, outH){
+  /* Invert 3x3 matrix H */
+  const a=H[0],b=H[1],c=H[2],d=H[3],e=H[4],f=H[5],g=H[6],h=H[7],i=H[8];
+  const det = a*(e*i - f*h) - b*(d*i - f*g) + c*(d*h - e*g);
+  if (Math.abs(det) < 1e-12) return null;
+  const inv = 1/det;
+  const Hi = new Float64Array([
+    (e*i - f*h)*inv, (c*h - b*i)*inv, (b*f - c*e)*inv,
+    (f*g - d*i)*inv, (a*i - c*g)*inv, (c*d - a*f)*inv,
+    (d*h - e*g)*inv, (b*g - a*h)*inv, (a*e - b*d)*inv
+  ]);
+  const sw = srcImgData.width, sh = srcImgData.height;
+  const sd = srcImgData.data;
+  const out = new ImageData(outW, outH);
+  const od = out.data;
+  for (let y=0;y<outH;y++){
+    for (let x=0;x<outW;x++){
+      const w = Hi[6]*x + Hi[7]*y + Hi[8];
+      if (Math.abs(w) < 1e-12) continue;
+      const sx = (Hi[0]*x + Hi[1]*y + Hi[2]) / w;
+      const sy = (Hi[3]*x + Hi[4]*y + Hi[5]) / w;
+      if (sx < 0 || sy < 0 || sx >= sw-1 || sy >= sh-1) continue;
+      const x0 = Math.floor(sx), y0 = Math.floor(sy);
+      const fx = sx - x0, fy = sy - y0;
+      const p00 = (y0*sw + x0)*4;
+      const p10 = p00 + 4;
+      const p01 = p00 + sw*4;
+      const p11 = p01 + 4;
+      const w00 = (1-fx)*(1-fy), w10 = fx*(1-fy), w01 = (1-fx)*fy, w11 = fx*fy;
+      const di = (y*outW + x)*4;
+      od[di]   = sd[p00]*w00 + sd[p10]*w10 + sd[p01]*w01 + sd[p11]*w11;
+      od[di+1] = sd[p00+1]*w00 + sd[p10+1]*w10 + sd[p01+1]*w01 + sd[p11+1]*w11;
+      od[di+2] = sd[p00+2]*w00 + sd[p10+2]*w10 + sd[p01+2]*w01 + sd[p11+2]*w11;
+      od[di+3] = 255;
+    }
+  }
+  return out;
+}
+
+/* Document filter — boost contrast, slight desaturation for text clarity.
+   Operates in-place on ImageData. */
+function filterDocument(imgData){
+  const d = imgData.data;
+  for (let i=0;i<d.length;i+=4){
+    const r=d[i], g=d[i+1], b=d[i+2];
+    const lum = 0.299*r + 0.587*g + 0.114*b;
+    /* Mix toward luminance (desaturate ~30%) */
+    let nr = r*0.7 + lum*0.3;
+    let ng = g*0.7 + lum*0.3;
+    let nb = b*0.7 + lum*0.3;
+    /* Contrast boost around 128 */
+    const k = 1.35;
+    nr = (nr - 128)*k + 132;
+    ng = (ng - 128)*k + 132;
+    nb = (nb - 128)*k + 132;
+    d[i]   = nr<0?0:nr>255?255:nr;
+    d[i+1] = ng<0?0:ng>255?255:ng;
+    d[i+2] = nb<0?0:nb>255?255:nb;
+  }
+}
+
+/* Open scanner modal for `file`. Returns Promise resolving to JPEG dataURL or null on cancel. */
+function scanDocument(file){
+  return new Promise(async (resolve)=>{
+    let baseDataURL;
+    try {
+      baseDataURL = await resizePhoto(file, 1600, .92);
+    } catch(err){
+      resolve(null); return;
+    }
+    const baseImg = new Image();
+    baseImg.onload = ()=>{
+      const overlay = document.createElement("div");
+      overlay.className = "scan-bg";
+      overlay.innerHTML = `
+        <div class="scan-stage" id="scn-stage">
+          <canvas id="scn-canvas"></canvas>
+          <svg id="scn-svg" width="100%" height="100%">
+            <defs>
+              <mask id="scn-mask">
+                <rect width="100%" height="100%" fill="white"/>
+                <polygon id="scn-poly" fill="black"/>
+              </mask>
+            </defs>
+            <rect width="100%" height="100%" fill="rgba(0,0,0,0.55)" mask="url(#scn-mask)"/>
+            <polygon id="scn-outline" fill="none" stroke="var(--tint)" stroke-width="2"/>
+          </svg>
+          <div class="scan-corner" data-i="0" id="c0"></div>
+          <div class="scan-corner" data-i="1" id="c1"></div>
+          <div class="scan-corner" data-i="2" id="c2"></div>
+          <div class="scan-corner" data-i="3" id="c3"></div>
+          <div class="scan-hint">גרור את 4 הפינות כך שיתאימו לקצוות הכרטיס</div>
+          <div class="scan-progress" id="scn-progress" style="display:none">
+            <div class="loader"></div>
+            <div style="color:#fff;margin-top:14px;font-size:15px">מעבד...</div>
+          </div>
+        </div>
+        <div class="scan-bar">
+          <button class="scan-btn" id="scn-cancel" style="background:transparent;color:#fff;border:none;font-size:16px;padding:8px 14px">ביטול</button>
+          <div class="scan-filters">
+            <button class="scan-flt active" data-flt="document" style="flex:1;padding:8px 12px;background:transparent;color:#fff;border:none;border-radius:8px;font-size:13px">מסמך</button>
+            <button class="scan-flt" data-flt="color" style="flex:1;padding:8px 12px;background:transparent;color:#fff;border:none;border-radius:8px;font-size:13px">צבע מקורי</button>
+          </div>
+          <button class="scan-btn primary" id="scn-ok" style="background:var(--tint);color:#fff;border:none;font-size:16px;padding:9px 18px;border-radius:9px;font-weight:600">סרוק</button>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+
+      /* Layout canvas to stage */
+      const stage  = overlay.querySelector("#scn-stage");
+      const canvas = overlay.querySelector("#scn-canvas");
+      const ctx    = canvas.getContext("2d");
+      const svg    = overlay.querySelector("#scn-svg");
+      const poly   = overlay.querySelector("#scn-poly");
+      const outline= overlay.querySelector("#scn-outline");
+      const progress = overlay.querySelector("#scn-progress");
+
+      let imgX=0, imgY=0, imgW=0, imgH=0; /* rendered image bounds inside stage */
+      let pts = [{x:.1,y:.1},{x:.9,y:.1},{x:.9,y:.9},{x:.1,y:.9}]; /* in image-relative [0..1] */
+      let filterMode = "document";
+
+      function fitImage(){
+        const sw = stage.clientWidth, sh = stage.clientHeight;
+        const ar = baseImg.width / baseImg.height;
+        let w = sw, h = sw/ar;
+        if (h > sh){ h = sh; w = sh*ar; }
+        imgW = w; imgH = h;
+        imgX = (sw - w)/2; imgY = (sh - h)/2;
+        canvas.width = baseImg.width;
+        canvas.height = baseImg.height;
+        canvas.style.position = "absolute";
+        canvas.style.left = imgX+"px";
+        canvas.style.top  = imgY+"px";
+        canvas.style.width = w+"px";
+        canvas.style.height = h+"px";
+        ctx.drawImage(baseImg, 0, 0);
+        redraw();
+      }
+
+      function ptToStage(p){
+        return { x: imgX + p.x*imgW, y: imgY + p.y*imgH };
+      }
+
+      function redraw(){
+        const stagePts = pts.map(ptToStage);
+        const polyStr = stagePts.map(p=>`${p.x},${p.y}`).join(" ");
+        poly.setAttribute("points", polyStr);
+        outline.setAttribute("points", polyStr);
+        for (let i=0;i<4;i++){
+          const el = overlay.querySelector("#c"+i);
+          el.style.left = stagePts[i].x + "px";
+          el.style.top  = stagePts[i].y + "px";
+        }
+      }
+
+      /* Pointer drag for corners */
+      let active = null;
+      for (let i=0;i<4;i++){
+        const el = overlay.querySelector("#c"+i);
+        el.addEventListener("pointerdown", e=>{
+          e.preventDefault();
+          active = i;
+          el.classList.add("dragging");
+          try { el.setPointerCapture(e.pointerId); } catch(_){}
+        });
+        el.addEventListener("pointermove", e=>{
+          if (active !== i) return;
+          e.preventDefault();
+          const rect = stage.getBoundingClientRect();
+          const sx = e.clientX - rect.left;
+          const sy = e.clientY - rect.top;
+          let rx = (sx - imgX) / imgW;
+          let ry = (sy - imgY) / imgH;
+          rx = Math.max(0, Math.min(1, rx));
+          ry = Math.max(0, Math.min(1, ry));
+          pts[i].x = rx; pts[i].y = ry;
+          redraw();
+        });
+        const release = e=>{
+          if (active !== i) return;
+          active = null;
+          el.classList.remove("dragging");
+          try { el.releasePointerCapture(e.pointerId); } catch(_){}
+        };
+        el.addEventListener("pointerup", release);
+        el.addEventListener("pointercancel", release);
+      }
+
+      /* Filter buttons */
+      overlay.querySelectorAll(".scan-flt").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          overlay.querySelectorAll(".scan-flt").forEach(b=>{
+            b.classList.remove("active");
+            b.style.background = "transparent";
+          });
+          btn.classList.add("active");
+          btn.style.background = "rgba(255,255,255,0.20)";
+          filterMode = btn.dataset.flt;
+        });
+      });
+      /* initial active style */
+      const dflt = overlay.querySelector('.scan-flt[data-flt="document"]');
+      if (dflt) dflt.style.background = "rgba(255,255,255,0.20)";
+
+      function close(result){
+        try { document.body.removeChild(overlay); } catch(_){}
+        window.removeEventListener("resize", fitImage);
+        resolve(result);
+      }
+
+      overlay.querySelector("#scn-cancel").addEventListener("click", ()=>close(null));
+
+      overlay.querySelector("#scn-ok").addEventListener("click", async ()=>{
+        progress.style.display = "flex";
+        await new Promise(r=>setTimeout(r, 30)); /* let UI paint */
+        try {
+          const W = baseImg.width, H = baseImg.height;
+          const srcPts = pts.map(p=>({ x: p.x*W, y: p.y*H }));
+          /* Compute output size from average of opposing edges */
+          const dist = (a,b)=>Math.hypot(a.x-b.x, a.y-b.y);
+          const widthTop    = dist(srcPts[0], srcPts[1]);
+          const widthBot    = dist(srcPts[3], srcPts[2]);
+          const heightLeft  = dist(srcPts[0], srcPts[3]);
+          const heightRight = dist(srcPts[1], srcPts[2]);
+          let outW = Math.round((widthTop + widthBot)/2);
+          let outH = Math.round((heightLeft + heightRight)/2);
+          /* Cap output dim */
+          const MAX = 1400;
+          if (outW > MAX || outH > MAX){
+            const k = MAX / Math.max(outW, outH);
+            outW = Math.round(outW*k);
+            outH = Math.round(outH*k);
+          }
+          if (outW < 100 || outH < 100){
+            progress.style.display = "none";
+            alert("בחר אזור גדול יותר");
+            return;
+          }
+          const dstPts = [
+            {x:0, y:0},
+            {x:outW, y:0},
+            {x:outW, y:outH},
+            {x:0, y:outH}
+          ];
+          const Hmat = computeHomography(srcPts, dstPts);
+          if (!Hmat){
+            progress.style.display = "none";
+            alert("שגיאת חישוב — נסה לסדר את הפינות מחדש");
+            return;
+          }
+          const srcData = ctx.getImageData(0, 0, W, H);
+          const outData = applyHomography(srcData, Hmat, outW, outH);
+          if (!outData){
+            progress.style.display = "none";
+            alert("שגיאת עיבוד");
+            return;
+          }
+          if (filterMode === "document") filterDocument(outData);
+          const oc = document.createElement("canvas");
+          oc.width = outW; oc.height = outH;
+          oc.getContext("2d").putImageData(outData, 0, 0);
+          const dataURL = oc.toDataURL("image/jpeg", 0.88);
+          close(dataURL);
+        } catch(err){
+          console.error(err);
+          progress.style.display = "none";
+          alert("שגיאה בעיבוד");
+        }
+      });
+
+      window.addEventListener("resize", fitImage);
+      requestAnimationFrame(fitImage);
+    };
+    baseImg.onerror = ()=>resolve(null);
+    baseImg.src = baseDataURL;
+  });
+}
+
+/* ============================================================
+   Categories
+   ============================================================ */
+const CATEGORIES = [
+  {id:"curtains",  name:"וילונות / Curtains"},
+  {id:"carpets",   name:"שטיחים / Carpets"},
+  {id:"furniture", name:"רהיטים / Furniture"},
+  {id:"fabric",    name:"בדים / Fabric"},
+  {id:"decor",     name:"דקורציה / Decor"},
+  {id:"other",     name:"אחר / Other"},
+];
+const catShort = id => ({curtains:"וילונות",carpets:"שטיחים",furniture:"רהיטים",fabric:"בדים",decor:"דקורציה",other:"אחר"}[id]||"—");
+
+/* ============================================================
+   Scoring
+   ============================================================ */
+function supplierScore(prods){
+  const rated  = prods.filter(p=>p.reviewRating>0);
+  const avg    = rated.length ? rated.reduce((a,p)=>a+p.reviewRating,0)/rated.length : 0;
+  const strong = prods.filter(p=>p.reviewRating>=4).length;
+  const total  = prods.length;
+  let label = "Low Interest", tone="gray";
+  if (total===0)                            { label="No Products"; tone="gray"; }
+  else if (strong>=2 && avg>=4)             { label="Priority Supplier"; tone="dark"; }
+  else if (strong>=1 && avg>=3.5)           { label="Strong Supplier";   tone="green"; }
+  else if (avg>=3 || total>=3)              { label="Interesting";       tone="orange"; }
+  else                                      { label="Low Interest";      tone="gray"; }
+  return {avg, strong, total, label, tone};
+}
+
+/* ============================================================
+   State + Routing
+   ============================================================ */
+const State = {
+  activeSessionId: null,
+  filters: { period:"all", cat:"all", supplierId:null, ratedOnly:false, topOnly:false, q:"" },
+  prevHash: ""
+};
+
+async function loadActiveSession(){
+  const k = await idb.get("kv","activeSession");
+  State.activeSessionId = k ? k.v : null;
+}
+async function setActiveSession(id){
+  State.activeSessionId = id;
+  await idb.put("kv",{k:"activeSession", v:id});
+}
+
+function navigate(name, params={}, replace=false){
+  const hash = params.id ? `#/${name}/${params.id}` : `#/${name}`;
+  State.prevHash = location.hash;
+  if (replace) history.replaceState({}, "", hash);
+  else if (location.hash !== hash) history.pushState({}, "", hash);
+  parseHash(); render();
+}
+function back(){
+  if (history.length>1) history.back();
+  else navigate("gallery", {}, true);
+}
+
+let CURRENT_ROUTE = {name:"gallery", params:{}};
+function parseHash(){
+  const h = location.hash.replace(/^#\/?/,"");
+  if (!h){ CURRENT_ROUTE={name:"gallery",params:{}}; return; }
+  const [name, id] = h.split("/");
+  CURRENT_ROUTE = {name, params: id?{id}:{}};
+}
+window.addEventListener("popstate", ()=>{ parseHash(); render(); });
+window.addEventListener("hashchange", ()=>{ parseHash(); render(); });
+
+/* ============================================================
+   Rendering helpers
+   ============================================================ */
+function setNavbar({title, large=false, back:showBack=false, actions=[]}){
+  const root = byId("app-root");
+  root.classList.toggle("has-large", !!large);
+
+  const bar = byId("navbar");
+  let rowHtml = "";
+  if (showBack){
+    rowHtml += `<button class="nav-back" id="nb-back">
+      <svg viewBox="0 0 13 21"><path d="M11 2L2 11l9 9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>חזרה</span>
+    </button>`;
+  } else {
+    rowHtml += `<span class="nav-back" style="visibility:hidden">‎</span>`;
+  }
+  rowHtml += `<div class="nav-spacer"></div>`;
+  if (!large) rowHtml += `<div class="nav-title">${esc(title||"")}</div>`;
+  else rowHtml += `<div class="nav-title">${esc(title||"")}</div>`;
+  actions.forEach((a,i)=>{
+    rowHtml += `<button class="nav-action ${a.bold?'bold':''}" data-act="${i}">${a.icon||""}${esc(a.label||"")}</button>`;
+  });
+
+  let largeHtml = "";
+  if (large){
+    largeHtml = `<div class="large-title">
+      <span>${esc(title||"")}</span>
+      <span class="large-actions" style="display:flex;gap:8px"></span>
+    </div>`;
+  }
+
+  bar.innerHTML = `<div class="nav-row">${rowHtml}</div>${largeHtml}`;
+
+  if (showBack) byId("nb-back").addEventListener("click", ()=>{ haptic("selection"); back(); });
+  actions.forEach((a,i)=>{
+    bar.querySelector(`[data-act="${i}"]`)?.addEventListener("click", ()=>{ haptic("selection"); a.onClick(); });
+  });
+}
+
+async function renderBanner(){
+  const host = byId("banner-host");
+  const root = byId("app-root");
+  if (!State.activeSessionId){ host.innerHTML=""; root.classList.remove("has-banner"); return; }
+  const s = await idb.get("sessions", State.activeSessionId);
+  if (!s){ host.innerHTML=""; root.classList.remove("has-banner"); return; }
+  const sup = s.supplierId ? await idb.get("suppliers", s.supplierId) : null;
+  const products = (await idb.all("products")).filter(p=>p.supplierId===s.supplierId);
+
+  host.innerHTML = `<div class="banner">
+    <div style="flex:1;min-width:0;overflow:hidden">
+      <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">📍 ${esc((sup&&sup.name)||"ספק ללא שם")}</div>
+      <div class="banner-meta">${products.length} מוצרים בסשן זה</div>
+    </div>
+    <div class="banner-actions">
+      <button data-act="add">+ מוצר</button>
+      <button data-act="end">סיום</button>
+    </div>
+  </div>`;
+  root.classList.add("has-banner");
+  host.querySelector('[data-act="add"]').addEventListener("click", ()=>{ haptic("selection"); navigate("addProduct",{id:s.supplierId}); });
+  host.querySelector('[data-act="end"]').addEventListener("click", endSession);
+}
+
+async function endSession(){
+  if (State.activeSessionId){
+    const s = await idb.get("sessions", State.activeSessionId);
+    if (s){
+      const prods = (await idb.all("products")).filter(p=>p.supplierId===s.supplierId);
+      s.productCount = prods.length;
+      s.endedAt = Date.now();
+      await idb.put("sessions", s);
+    }
+  }
+  await setActiveSession(null);
+  haptic("success");
+  toast("הסשן הסתיים");
+  render();
+}
+
+/* ============================================================
+   Tab + scroll handling
+   ============================================================ */
+function setActiveTab(name){
+  $$(".tab", byId("tabbar")).forEach(b=>{
+    const map = {gallery:"gallery", suppliers:"suppliers", capture:"capture", review:"review", summary:"summary"};
+    const aliases = {
+      gallery:["gallery","product"],
+      suppliers:["suppliers","supplier"],
+      capture:["capture","session","addProduct"],
+      review:["review"],
+      summary:["summary","settings"]
+    };
+    b.classList.toggle("active", aliases[b.dataset.tab].includes(name));
+  });
+}
+
+/* Scroll detection for nav border / large title collapse */
+let scrollEl = null;
+function attachScroll(){
+  document.removeEventListener("scroll", onScroll, true);
+  document.addEventListener("scroll", onScroll, {passive:true,capture:true});
+  onScroll();
+}
+function onScroll(){
+  const sc = window.scrollY || document.documentElement.scrollTop;
+  byId("app-root").classList.toggle("scrolled", sc>4);
+  byId("navbar").classList.toggle("scrolled", sc>4);
+}
+window.addEventListener("scroll", onScroll, {passive:true});
+
+/* ============================================================
+   Main render dispatch
+   ============================================================ */
+async function render(){
+  const {name, params} = CURRENT_ROUTE;
+  setActiveTab(name);
+  await renderBanner();
+  const app = byId("app");
+  app.classList.remove("page-back");
+  app.classList.add("page");
+
+  switch(name){
+    case "gallery":   return renderGallery();
+    case "suppliers": return renderSuppliersList();
+    case "capture":   return renderCaptureHub();
+    case "session":   return renderSessionStart();
+    case "addProduct":return renderAddProduct(params.id);
+    case "product":   return renderProduct(params.id);
+    case "supplier":  return renderSupplier(params.id);
+    case "review":    return renderReview();
+    case "summary":   return renderSummary();
+    case "settings":  return renderSettings();
+    default:          return renderGallery();
+  }
+}
+
+/* ============================================================
+   Action sheet helper
+   ============================================================ */
+function actionSheet({title, actions, cancel="ביטול"}){
+  return new Promise(resolve=>{
+    const wrap = document.createElement("div");
+    wrap.className = "sheet-bg";
+    const titleHtml = title ? `<div class="sheet-title">${esc(title)}</div>` : "";
+    wrap.innerHTML = `
+      <div class="sheet">
+        ${titleHtml}
+        ${actions.map((a,i)=>`<button class="sheet-action ${a.destructive?'destructive':''} ${a.bold?'bold':''}" data-i="${i}">${esc(a.label)}</button>`).join("")}
+      </div>
+      <button class="sheet-cancel" id="sh-cancel">${esc(cancel)}</button>
+    `;
+    document.body.appendChild(wrap);
+    const close = (val)=>{ wrap.remove(); resolve(val); };
+    wrap.addEventListener("click", e=>{ if (e.target===wrap) close(null); });
+    $$(".sheet-action", wrap).forEach(b=>b.addEventListener("click", ()=>{
+      haptic("selection");
+      close(actions[+b.dataset.i].value);
+    }));
+    $("#sh-cancel", wrap).addEventListener("click", ()=>close(null));
+  });
+}
+
+async function confirmSheet(message, confirmLabel="אישור", destructive=false){
+  const r = await actionSheet({
+    title: message,
+    actions: [ { label: confirmLabel, value: true, destructive, bold:true } ],
+  });
+  return !!r;
+}
+
+/* ============================================================
+   GALLERY
+   ============================================================ */
+async function renderGallery(){
+  setNavbar({
+    title: "מוצרים",
+    large: true,
+    actions: [
+      { label: "+ ספק", bold:true, onClick: ()=>navigate("session") }
+    ]
+  });
+
+  const app = byId("app");
+  const [products, suppliers] = await Promise.all([idb.all("products"), idb.all("suppliers")]);
+  const supMap = Object.fromEntries(suppliers.map(s=>[s.id,s]));
+  const f = State.filters;
+
+  // filter
+  let filtered = [...products].sort((a,b)=>b.dateAdded-a.dateAdded);
+  if (f.period==="today")  filtered = filtered.filter(p=>isToday(p.dateAdded));
+  if (f.cat!=="all")       filtered = filtered.filter(p=>p.category===f.cat);
+  if (f.supplierId)        filtered = filtered.filter(p=>p.supplierId===f.supplierId);
+  if (f.ratedOnly)         filtered = filtered.filter(p=>p.reviewRating>0);
+  if (f.topOnly)           filtered = filtered.filter(p=>p.reviewRating>=4);
+  if (f.q){
+    const q = f.q.toLowerCase();
+    filtered = filtered.filter(p=>{
+      const sup = supMap[p.supplierId];
+      return (p.name||"").toLowerCase().includes(q) ||
+             (p.notes||"").toLowerCase().includes(q) ||
+             (p.size||"").toLowerCase().includes(q) ||
+             (p.price||"").toLowerCase().includes(q) ||
+             (sup&&(sup.name||"").toLowerCase().includes(q));
+    });
+  }
+
+  const supplierChip = f.supplierId ? `<button class="chip" aria-pressed="true" data-clear="supplierId">${esc((supMap[f.supplierId]||{}).name||"ספק")} ✕</button>`:"";
+
+  app.innerHTML = `
+    <div class="search-wrap">
+      <div class="search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="q" type="search" placeholder="חיפוש מוצר, ספק, הערה..." value="${esc(f.q||"")}" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="segmented">
+      <button data-seg="all"   aria-pressed="${f.period==='all'}">הכל</button>
+      <button data-seg="today" aria-pressed="${f.period==='today'}">היום</button>
+      <button data-seg="rated" aria-pressed="${f.ratedOnly && !f.topOnly}">מדורגים</button>
+      <button data-seg="top"   aria-pressed="${f.topOnly}">★ מעולים</button>
+    </div>
+
+    <div class="chip-row">
+      ${supplierChip}
+      ${f.cat!=="all" ? `<button class="chip" aria-pressed="true" data-clear="cat">${esc(catShort(f.cat))} ✕</button>` :
+         CATEGORIES.map(c=>`<button class="chip" data-cat="${c.id}" aria-pressed="false">${esc(catShort(c.id))}</button>`).join("")}
+    </div>
+
+    ${filtered.length===0 ? renderEmptyState(products.length===0, f) : `
+      <div class="muted padded" style="padding-bottom:8px">${filtered.length} ${filtered.length===1?"מוצר":"מוצרים"}</div>
+      <div class="grid" id="grid">
+        ${filtered.map(p=>productCard(p, supMap[p.supplierId])).join("")}
+      </div>
+    `}
+    <div class="spacer-40"></div>
+  `;
+
+  // search input — debounced
+  let toid;
+  $("#q").addEventListener("input", e=>{
+    clearTimeout(toid);
+    const v = e.target.value;
+    toid = setTimeout(()=>{ f.q = v; renderGallery(); }, 250);
+  });
+  // segmented
+  $$("[data-seg]", app).forEach(b=>b.addEventListener("click", ()=>{
+    const v = b.dataset.seg;
+    haptic("selection");
+    if (v==="all"){ f.period="all"; f.ratedOnly=false; f.topOnly=false; }
+    else if (v==="today"){ f.period= f.period==="today"?"all":"today"; }
+    else if (v==="rated"){ f.ratedOnly = !f.ratedOnly; if(f.ratedOnly) f.topOnly=false; }
+    else if (v==="top"){ f.topOnly = !f.topOnly; if(f.topOnly) f.ratedOnly=false; }
+    renderGallery();
+  }));
+  // chips
+  $$("[data-cat]", app).forEach(b=>b.addEventListener("click", ()=>{
+    haptic("selection");
+    f.cat = b.dataset.cat; renderGallery();
+  }));
+  $$("[data-clear]", app).forEach(b=>b.addEventListener("click", ()=>{
+    haptic("selection");
+    if (b.dataset.clear==="cat") f.cat="all";
+    if (b.dataset.clear==="supplierId") f.supplierId=null;
+    renderGallery();
+  }));
+  // product cards
+  $$(".pcard", app).forEach(c=>c.addEventListener("click", ()=>{
+    haptic("selection"); navigate("product",{id:c.dataset.id});
+  }));
+
+  attachScroll();
+}
+
+function renderEmptyState(first, f){
+  if (first){
+    return `<div class="empty">
+      <div class="em-icon">
+        <svg viewBox="0 0 24 24"><path d="M2.5 7.5h3l1.5-2h10l1.5 2h3a1 1 0 0 1 1 1V18a2 2 0 0 1-2 2H3.5a2 2 0 0 1-2-2V8.5a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg>
+      </div>
+      <h2>בואו נתחיל</h2>
+      <p>פתח את הספק הראשון, צלם כרטיס ביקור, והתחל להוסיף מוצרים.</p>
+      <button class="btn" onclick="navigate('session')">+ ספק חדש</button>
+    </div>`;
+  }
+  return `<div class="empty">
+    <div class="em-icon">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+    </div>
+    <h2>אין תוצאות</h2>
+    <p>נסה להסיר סינון כדי לראות יותר.</p>
+  </div>`;
+}
+
+function productCard(p, sup){
+  const photo = p.mainPhoto || (p.photos&&p.photos[0]) || null;
+  const rating = p.reviewRating>0 ? `<span class="badge-rating">★ ${p.reviewRating}</span>` : "";
+  const count  = (p.photos&&p.photos.length>1) ? `<span class="badge-count">⊞ ${p.photos.length}</span>` : "";
+  return `<div class="pcard" data-id="${p.id}">
+    <div class="thumb">
+      ${photo ? `<img src="${photo}" loading="lazy" alt="">` : `<div class="noimg">📦</div>`}
+      ${count}${rating}
+      ${p.category?`<span class="badge-cat">${esc(catShort(p.category))}</span>`:""}
+    </div>
+    <div class="body">
+      <div class="price">${p.price?esc(p.price)+" "+esc(p.currency||"$"):"—"}</div>
+      ${p.size?`<div class="meta" dir="ltr">${esc(p.size)}</div>`:""}
+      <div class="meta">${esc((sup&&sup.name)||"ספק")}</div>
+    </div>
+  </div>`;
+}
+
+/* ============================================================
+   SUPPLIERS LIST
+   ============================================================ */
+async function renderSuppliersList(){
+  setNavbar({
+    title:"ספקים", large:true,
+    actions:[{label:"+ חדש", bold:true, onClick:()=>navigate("session")}]
+  });
+  const app = byId("app");
+  const [suppliers, products] = await Promise.all([idb.all("suppliers"), idb.all("products")]);
+  const byS = {};
+  products.forEach(p=>{(byS[p.supplierId]=byS[p.supplierId]||[]).push(p)});
+  suppliers.sort((a,b)=>b.dateAdded-a.dateAdded);
+
+  if (suppliers.length===0){
+    app.innerHTML = `<div class="empty">
+      <div class="em-icon">
+        <svg viewBox="0 0 24 24"><path d="M3 21v-1.5a4.5 4.5 0 0 1 4.5-4.5h9a4.5 4.5 0 0 1 4.5 4.5V21"/><circle cx="12" cy="7.5" r="4"/></svg>
+      </div>
+      <h2>אין ספקים עדיין</h2>
+      <p>התחל סשן חדש כדי לאסוף ספק וכרטיס ביקור.</p>
+      <button class="btn" onclick="navigate('session')">+ ספק חדש</button>
+    </div>`;
+    return;
+  }
+
+  app.innerHTML = `
+    <div class="list-section"><div class="list">
+      ${suppliers.map(s=>{
+        const prods = byS[s.id]||[];
+        const score = supplierScore(prods);
+        const initial = (s.name||"?").trim().charAt(0).toUpperCase();
+        return `<div class="supplier-row" data-id="${s.id}" style="cursor:pointer">
+          <div class="savatar">${s.businessCard?`<img src="${s.businessCard}">`:esc(initial)}</div>
+          <div class="sinfo">
+            <div class="sname">${esc(s.name||"ללא שם")}</div>
+            <div class="smeta">
+              <span>${prods.length} מוצרים</span>
+              ${score.strong>0?`<span>★ ${score.strong} חזקים</span>`:""}
+              ${s.boothNumber?`<span>ביתן ${esc(s.boothNumber)}</span>`:""}
+            </div>
+          </div>
+          <span class="pill ${score.tone}">${esc(score.label)}</span>
+        </div>`;
+      }).join("")}
+    </div></div>
+    <div class="spacer-40"></div>
+  `;
+  $$(".supplier-row", app).forEach(r=>r.addEventListener("click", ()=>{
+    haptic("selection"); navigate("supplier",{id:r.dataset.id});
+  }));
+  attachScroll();
+}
+
+/* ============================================================
+   CAPTURE HUB
+   ============================================================ */
+async function renderCaptureHub(){
+  setNavbar({title:"תפיסה", large:true});
+  const app = byId("app");
+  if (State.activeSessionId){
+    const s = await idb.get("sessions", State.activeSessionId);
+    const sup = s && s.supplierId ? await idb.get("suppliers", s.supplierId) : null;
+    app.innerHTML = `
+      <div class="list-section">
+        <div class="list-section-header">סשן פעיל</div>
+        <div class="list">
+          <div class="list-row">
+            <div class="savatar">${sup&&sup.businessCard?`<img src="${sup.businessCard}">`:(esc((sup&&sup.name||"?").charAt(0).toUpperCase()))}</div>
+            <div class="row-main">
+              <div class="row-title">${esc((sup&&sup.name)||"ספק ללא שם")}</div>
+              <div class="row-sub">${sup&&sup.boothNumber?'ביתן '+esc(sup.boothNumber):'אין מספר ביתן'}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-stack">
+        <button class="btn" onclick='navigate("addProduct",{id:"${sup?sup.id:""}"})'>+ הוסף מוצר חדש</button>
+        <button class="btn tinted" onclick='navigate("supplier",{id:"${sup?sup.id:""}"})'>צפה בכל המוצרים של הספק</button>
+        <button class="btn destructive-tinted" onclick="endSession()">סיים סשן</button>
+      </div>
+    `;
+    return;
+  }
+  app.innerHTML = `
+    <div class="empty" style="padding-top:30px">
+      <div class="em-icon">
+        <svg viewBox="0 0 24 24"><path d="M2.5 7.5h3l1.5-2h10l1.5 2h3a1 1 0 0 1 1 1V18a2 2 0 0 1-2 2H3.5a2 2 0 0 1-2-2V8.5a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/></svg>
+      </div>
+      <h2>מוכן להתחיל?</h2>
+      <p>פתח ספק חדש כדי להתחיל לצלם מוצרים, מחירים ומידות.</p>
+      <button class="btn" onclick="navigate('session')">+ ספק חדש</button>
+    </div>
+  `;
+}
+
+/* ============================================================
+   START SESSION
+   ============================================================ */
+async function renderSessionStart(){
+  setNavbar({title:"ספק חדש", back:true,
+    actions:[{label:"שמור", bold:true, onClick:()=>doSave(true)}]
+  });
+  const app = byId("app");
+  app.innerHTML = `
+    <div class="list-section">
+      <div class="list-section-header">סריקת כרטיס ביקור</div>
+      <div class="bigphoto" id="card-slot">
+        <div class="add-block">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7V5a2 2 0 0 1 2-2h2"/>
+            <path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+            <path d="M21 17v2a2 2 0 0 1-2 2h-2"/>
+            <path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
+            <path d="M7 12h10"/>
+          </svg>
+          <span>סרוק כרטיס ביקור</span>
+        </div>
+        <input type="file" accept="image/*" capture="environment" id="card-input">
+      </div>
+      <div class="list-section-footer">אופציונלי. צלם את הכרטיס וגרור את 4 הפינות ליישור.</div>
+    </div>
+
+    <div class="list-section">
+      <div class="list-section-header">ספק</div>
+      <div class="list">
+        <div class="form-row"><label class="flabel">שם</label><input class="finput" id="f-name" placeholder="שם ספק"></div>
+        <div class="form-row"><label class="flabel">ביתן</label><input class="finput" id="f-booth" placeholder="A-12"></div>
+        <div class="form-row"><label class="flabel">מדינה</label><input class="finput" id="f-country" placeholder="China"></div>
+      </div>
+    </div>
+
+    <div class="list-section">
+      <div class="list-section-header">איש קשר</div>
+      <div class="list">
+        <div class="form-row"><label class="flabel">איש קשר</label><input class="finput" id="f-contact" placeholder="John Doe"></div>
+        <div class="form-row"><label class="flabel">טלפון</label><input class="finput" id="f-phone" type="tel" dir="ltr" placeholder="+86 ..."></div>
+        <div class="form-row"><label class="flabel">Email</label><input class="finput" id="f-email" type="email" dir="ltr" placeholder="info@..."></div>
+      </div>
+    </div>
+
+    <div class="list-section">
+      <div class="list-section-header">הערות</div>
+      <div class="list">
+        <div class="form-row full"><textarea class="ftext" id="f-notes" placeholder="רושם ראשוני..."></textarea></div>
+      </div>
+    </div>
+
+    <div class="btn-stack">
+      <button class="btn" id="start-btn">+ התחל והוסף מוצר ראשון</button>
+      <button class="btn tinted" id="save-only">שמור ספק בלבד</button>
+    </div>
+    <div class="spacer-40"></div>
+  `;
+
+  let cardImg = null;
+  const emptyCardHTML = `
+    <div class="add-block">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 7V5a2 2 0 0 1 2-2h2"/>
+        <path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+        <path d="M21 17v2a2 2 0 0 1-2 2h-2"/>
+        <path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
+        <path d="M7 12h10"/>
+      </svg>
+      <span>סרוק כרטיס ביקור</span>
+    </div>
+    <input type="file" accept="image/*" capture="environment" id="card-input">
+  `;
+  function bindCardSlot(){
+    const slot = $("#card-slot"), inp = $("#card-input");
+    inp.addEventListener("change", async e=>{
+      const f = e.target.files[0];
+      if (!f) return;
+      /* Reset input so re-selecting same file fires change */
+      try { inp.value = ""; } catch(_){}
+      const scanned = await scanDocument(f);
+      if (!scanned){
+        /* Cancelled — keep slot empty */
+        return;
+      }
+      cardImg = scanned;
+      slot.classList.add("has");
+      slot.innerHTML = `
+        <img src="${cardImg}">
+        <button class="remove-x" id="card-rm" type="button"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+        <input type="file" accept="image/*" capture="environment" id="card-input">
+      `;
+      $("#card-rm").addEventListener("click", e=>{
+        e.preventDefault(); e.stopPropagation();
+        cardImg = null;
+        slot.classList.remove("has");
+        slot.innerHTML = emptyCardHTML;
+        bindCardSlot();
+      });
+      bindCardSlot();
+    });
+  }
+  bindCardSlot();
+
+  async function doSave(startProducts){
+    haptic("success");
+    const sup = {
+      id: uid(),
+      name: $("#f-name").value.trim(),
+      contactPerson: $("#f-contact").value.trim(),
+      phone: $("#f-phone").value.trim(),
+      email: $("#f-email").value.trim(),
+      boothNumber: $("#f-booth").value.trim(),
+      country: $("#f-country").value.trim(),
+      businessCard: cardImg,
+      notes: $("#f-notes").value.trim(),
+      dateAdded: Date.now(),
+    };
+    await idb.put("suppliers", sup);
+    const sess = { id:uid(), supplierId:sup.id, dateAdded:Date.now(), productCount:0, notes:"" };
+    await idb.put("sessions", sess);
+    await setActiveSession(sess.id);
+    toast("ספק נשמר");
+    if (startProducts) navigate("addProduct",{id:sup.id});
+    else navigate("supplier",{id:sup.id});
+  }
+  $("#start-btn").addEventListener("click", ()=>doSave(true));
+  $("#save-only").addEventListener("click", ()=>doSave(false));
+  attachScroll();
+}
+
+/* ============================================================
+   ADD PRODUCT
+   ============================================================ */
+async function renderAddProduct(supplierId){
+  const sup = supplierId ? await idb.get("suppliers", supplierId) : null;
+  if (!sup){ toast("ספק לא נמצא"); return navigate("gallery", {}, true); }
+
+  setNavbar({
+    title: sup.name||"מוצר חדש", back:true,
+    actions:[{label:"שמור", bold:true, onClick:()=>doSave("back")}]
+  });
+  const app = byId("app");
+  let photos = [null,null,null];
+
+  app.innerHTML = `
+    <div class="list-section">
+      <div class="list-section-header">תמונות (עד 3)</div>
+      <div class="photo-grid" id="photos"></div>
+    </div>
+
+    <div class="list-section">
+      <div class="list-section-header">מחיר ומידות</div>
+      <div class="list">
+        <div class="form-row">
+          <label class="flabel">מחיר</label>
+          <input class="finput" id="f-price" type="text" inputmode="decimal" dir="ltr" placeholder="12.50">
+        </div>
+        <div class="form-row">
+          <label class="flabel">מטבע</label>
+          <select class="finput" id="f-cur" style="text-align:end">
+            <option value="USD">USD $</option>
+            <option value="EUR">EUR €</option>
+            <option value="ILS">ILS ₪</option>
+            <option value="CNY">CNY ¥</option>
+            <option value="GBP">GBP £</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label class="flabel">מידות</label>
+          <input class="finput" id="f-size" dir="ltr" placeholder="120x200 cm">
+        </div>
+      </div>
+    </div>
+
+    <div class="list-section">
+      <div class="list-section-header">סיווג</div>
+      <div class="list">
+        <div class="form-row">
+          <label class="flabel">קטגוריה</label>
+          <select class="finput" id="f-cat" style="text-align:end">
+            ${CATEGORIES.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join("")}
+          </select>
+        </div>
+        <div class="form-row">
+          <label class="flabel">שם</label>
+          <input class="finput" id="f-name" placeholder="(אופציונלי)">
+        </div>
+      </div>
+    </div>
+
+    <div class="list-section">
+      <div class="list-section-header">הערות</div>
+      <div class="list">
+        <div class="form-row full">
+          <textarea class="ftext" id="f-notes" placeholder="צבעים, חומר, MOQ, lead time..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-stack">
+      <button class="btn" id="save-new">שמור והוסף עוד</button>
+      <button class="btn tinted" id="save-back">שמור וחזור לספק</button>
+      <button class="btn gray" id="save-end">שמור וסיים סשן</button>
+    </div>
+    <div class="spacer-40"></div>
+  `;
+
+  function drawPhotos(){
+    $("#photos").innerHTML = photos.map((p,i)=>{
+      if (p) return `<div class="photo-slot has" data-i="${i}">
+        <img src="${p}">
+        ${i===0?'<span class="main-flag">ראשי</span>':''}
+        <button class="remove-x" data-rm="${i}" type="button"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>`;
+      return `<div class="photo-slot" data-i="${i}">
+        <div class="add-icn">
+          <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>
+          <span>הוסף</span>
+        </div>
+        <input type="file" accept="image/*" capture="environment" data-i="${i}">
+      </div>`;
+    }).join("");
+    $$("#photos input[type=file]").forEach(inp=>{
+      inp.addEventListener("change", async e=>{
+        const i = +inp.dataset.i;
+        const f = e.target.files[0]; if (!f) return;
+        photos[i] = await resizePhoto(f, 1400, .8);
+        haptic("selection");
+        drawPhotos();
+      });
+    });
+    $$("#photos [data-rm]").forEach(b=>{
+      b.addEventListener("click", e=>{
+        e.preventDefault(); e.stopPropagation();
+        const i = +b.dataset.rm;
+        photos[i] = null;
+        photos = photos.filter(x=>x!==null);
+        while (photos.length<3) photos.push(null);
+        drawPhotos();
+      });
+    });
+  }
+  drawPhotos();
+
+  async function saveOne(){
+    const clean = photos.filter(Boolean);
+    const p = {
+      id: uid(),
+      supplierId: sup.id,
+      dateAdded: Date.now(),
+      photos: clean,
+      mainPhoto: clean[0]||null,
+      category: $("#f-cat").value,
+      name: $("#f-name").value.trim(),
+      size: $("#f-size").value.trim(),
+      price: $("#f-price").value.trim(),
+      currency: $("#f-cur").value,
+      notes: $("#f-notes").value.trim(),
+      reviewRating: 0,
+      reviewNotes: "",
+      status:"captured",
+    };
+    await idb.put("products", p);
+    return p;
+  }
+
+  async function doSave(after){
+    await saveOne();
+    haptic("success");
+    toast("נשמר");
+    if (after==="new")  return navigate("addProduct",{id:sup.id});
+    if (after==="end")  { await endSession(); return navigate("supplier",{id:sup.id}); }
+    return navigate("supplier",{id:sup.id});
+  }
+  $("#save-new").addEventListener("click", ()=>doSave("new"));
+  $("#save-back").addEventListener("click", ()=>doSave("back"));
+  $("#save-end").addEventListener("click", ()=>doSave("end"));
+  attachScroll();
+}
+
+/* ============================================================
+   PRODUCT DETAIL
+   ============================================================ */
+async function renderProduct(id){
+  const p = await idb.get("products", id);
+  if (!p){ toast("מוצר לא נמצא"); return navigate("gallery",{},true); }
+  const sup = p.supplierId ? await idb.get("suppliers", p.supplierId) : null;
+
+  setNavbar({
+    title:"מוצר", back:true,
+    actions:[{label:"⋯", onClick: ()=>productMenu(id)}]
+  });
+  const app = byId("app");
+  const photos = p.photos && p.photos.length ? p.photos : (p.mainPhoto?[p.mainPhoto]:[]);
+
+  app.innerHTML = `
+    <div class="detail-photo">
+      ${photos.length ? `<img id="gmain" src="${photos[0]}">` : `<div class="ph-empty">📦</div>`}
+    </div>
+    ${photos.length>1 ? `<div class="detail-thumbs" id="thumbs">
+      ${photos.map((ph,i)=>`<button data-i="${i}" ${i===0?'aria-current="true"':''}><img src="${ph}"></button>`).join("")}
+    </div>`:`<div class="spacer-12"></div>`}
+
+    <div class="list-section">
+      <div class="list-section-header">פרטים</div>
+      <div class="list kv">
+        ${p.name?`<div class="kv-row"><span class="kv-key">שם</span><span class="kv-val">${esc(p.name)}</span></div>`:""}
+        <div class="kv-row"><span class="kv-key">מחיר</span><span class="kv-val">${p.price?esc(p.price)+" "+esc(p.currency||"USD"):"—"}</span></div>
+        <div class="kv-row"><span class="kv-key">מידות</span><span class="kv-val" dir="ltr">${esc(p.size||"—")}</span></div>
+        <div class="kv-row"><span class="kv-key">קטגוריה</span><span class="kv-val">${esc(catShort(p.category))}</span></div>
+        <div class="kv-row tap" id="open-sup">
+          <span class="kv-key">ספק</span>
+          <span class="kv-val" style="display:flex;align-items:center;gap:6px;color:var(--tint)">${esc((sup&&sup.name)||"—")}<svg style="width:7px;height:13px" viewBox="0 0 7 13"><path d="M1 1l5 5.5L1 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+        </div>
+        <div class="kv-row"><span class="kv-key">נוסף</span><span class="kv-val">${fmtDate(p.dateAdded)}</span></div>
+      </div>
+    </div>
+
+    ${p.notes ? `<div class="list-section">
+      <div class="list-section-header">הערות</div>
+      <div class="list"><div class="form-row full"><div style="font-size:15px;line-height:21px">${nl2br(p.notes)}</div></div></div>
+    </div>`:""}
+
+    <div class="list-section">
+      <div class="list-section-header">דירוג</div>
+      <div class="list">
+        <div class="form-row" style="justify-content:center"><div class="stars" id="stars">
+          ${[1,2,3,4,5].map(n=>`<button data-n="${n}" class="${p.reviewRating>=n?'on':''}">★</button>`).join("")}
+        </div></div>
+        <div class="form-row full">
+          <textarea class="ftext" id="rev-notes" placeholder="הערות דירוג...">${esc(p.reviewNotes||"")}</textarea>
+        </div>
+      </div>
+    </div>
+
+    <div class="spacer-40"></div>
+  `;
+
+  // Thumbnails
+  $$("#thumbs button", app).forEach(b=>{
+    b.addEventListener("click", ()=>{
+      haptic("selection");
+      const i = +b.dataset.i;
+      $("#gmain").src = photos[i];
+      $$("#thumbs button", app).forEach(x=>x.removeAttribute("aria-current"));
+      b.setAttribute("aria-current","true");
+    });
+  });
+  // Open supplier
+  $("#open-sup")?.addEventListener("click", ()=>{ if (sup) navigate("supplier",{id:sup.id}); });
+  // Stars
+  $$("#stars button").forEach(b=>{
+    b.addEventListener("click", async ()=>{
+      const n = +b.dataset.n;
+      p.reviewRating = (p.reviewRating===n?0:n);
+      await idb.put("products", p);
+      $$("#stars button").forEach(x=>x.classList.toggle("on", p.reviewRating>=(+x.dataset.n)));
+      haptic("success");
+      toast(p.reviewRating?`★${p.reviewRating}`:"דירוג הוסר");
+    });
+  });
+  $("#rev-notes").addEventListener("blur", async ()=>{
+    p.reviewNotes = $("#rev-notes").value.trim();
+    await idb.put("products", p);
+  });
+  attachScroll();
+}
+
+async function productMenu(id){
+  const choice = await actionSheet({
+    actions:[
+      {label:"ערוך פרטים", value:"edit", bold:true},
+      {label:"שכפל מוצר",  value:"dupe"},
+      {label:"מחק מוצר",   value:"del", destructive:true},
+    ]
+  });
+  if (choice==="edit") return editProductModal(id);
+  if (choice==="dupe") return dupeProduct(id);
+  if (choice==="del")  return deleteProduct(id);
+}
+async function deleteProduct(id){
+  if (!await confirmSheet("למחוק מוצר זה?","מחק",true)) return;
+  await idb.del("products", id); haptic("warn"); toast("נמחק"); back();
+}
+async function dupeProduct(id){
+  const p = await idb.get("products", id); if (!p) return;
+  const c = {...p, id: uid(), dateAdded: Date.now(), reviewRating:0, reviewNotes:""};
+  await idb.put("products", c);
+  toast("שוכפל"); navigate("product",{id:c.id});
+}
+async function editProductModal(id){
+  const p = await idb.get("products", id); if (!p) return;
+  const m = document.createElement("div");
+  m.innerHTML = `
+    <div class="modal-bg" id="mbg"><div class="modal">
+      <div class="modal-head">
+        <button id="mcancel">ביטול</button>
+        <h2>עריכת מוצר</h2>
+        <button class="bold" id="msave">שמור</button>
+      </div>
+      <div class="modal-body">
+        <div class="list-section"><div class="list">
+          <div class="form-row"><label class="flabel">שם</label><input class="finput" id="e-name" value="${esc(p.name||'')}"></div>
+          <div class="form-row"><label class="flabel">מחיר</label><input class="finput" id="e-price" dir="ltr" value="${esc(p.price||'')}"></div>
+          <div class="form-row"><label class="flabel">מטבע</label>
+            <select class="finput" id="e-cur" style="text-align:end">
+              ${["USD","EUR","ILS","CNY","GBP"].map(c=>`<option ${p.currency===c?"selected":""}>${c}</option>`).join("")}
+            </select>
+          </div>
+          <div class="form-row"><label class="flabel">מידות</label><input class="finput" id="e-size" dir="ltr" value="${esc(p.size||'')}"></div>
+          <div class="form-row"><label class="flabel">קטגוריה</label>
+            <select class="finput" id="e-cat" style="text-align:end">
+              ${CATEGORIES.map(c=>`<option value="${c.id}" ${p.category===c.id?'selected':''}>${esc(c.name)}</option>`).join("")}
+            </select>
+          </div>
+        </div></div>
+        <div class="list-section"><div class="list">
+          <div class="form-row full"><textarea class="ftext" id="e-notes">${esc(p.notes||"")}</textarea></div>
+        </div></div>
+      </div>
+    </div></div>
+  `;
+  document.body.appendChild(m.firstElementChild);
+  const close = ()=>byId("mbg")?.remove();
+  $("#mcancel").onclick = close;
+  $("#mbg").addEventListener("click", e=>{ if(e.target.id==="mbg") close(); });
+  $("#msave").onclick = async ()=>{
+    p.name=$("#e-name").value.trim();
+    p.price=$("#e-price").value.trim();
+    p.currency=$("#e-cur").value;
+    p.size=$("#e-size").value.trim();
+    p.category=$("#e-cat").value;
+    p.notes=$("#e-notes").value.trim();
+    await idb.put("products", p);
+    close(); haptic("success"); toast("עודכן"); render();
+  };
+}
+
+/* ============================================================
+   SUPPLIER DETAIL
+   ============================================================ */
+async function renderSupplier(id){
+  const sup = await idb.get("suppliers", id);
+  if (!sup){ toast("ספק לא נמצא"); return navigate("suppliers",{},true); }
+  setNavbar({
+    title: sup.name||"ספק", back:true,
+    actions:[{label:"⋯", onClick: ()=>supplierMenu(id)}]
+  });
+  const app = byId("app");
+  const products = (await idb.all("products")).filter(p=>p.supplierId===id).sort((a,b)=>b.dateAdded-a.dateAdded);
+  const score = supplierScore(products);
+  const isActive = State.activeSessionId && (await idb.get("sessions", State.activeSessionId))?.supplierId===id;
+
+  app.innerHTML = `
+    ${sup.businessCard ? `<div class="detail-photo" style="aspect-ratio:16/10"><img src="${sup.businessCard}"></div>`:""}
+
+    <div class="padded" style="padding-top:14px;display:flex;justify-content:space-between;align-items:center;gap:10px">
+      <div>
+        <div style="font-size:22px;font-weight:700;letter-spacing:-0.018em">${esc(sup.name||"ללא שם")}</div>
+        ${sup.contactPerson?`<div class="muted" style="margin-top:2px">${esc(sup.contactPerson)}</div>`:""}
+      </div>
+      <span class="pill ${score.tone}">${esc(score.label)}</span>
+    </div>
+
+    <div class="list-section">
+      <div class="list-section-header">פרטי קשר</div>
+      <div class="list kv">
+        ${sup.boothNumber?`<div class="kv-row"><span class="kv-key">ביתן</span><span class="kv-val">${esc(sup.boothNumber)}</span></div>`:""}
+        ${sup.country?`<div class="kv-row"><span class="kv-key">מדינה</span><span class="kv-val">${esc(sup.country)}</span></div>`:""}
+        ${sup.phone?`<div class="kv-row"><span class="kv-key">טלפון</span><span class="kv-val" dir="ltr"><a href="tel:${esc(sup.phone)}">${esc(sup.phone)}</a></span></div>`:""}
+        ${sup.email?`<div class="kv-row"><span class="kv-key">Email</span><span class="kv-val" dir="ltr"><a href="mailto:${esc(sup.email)}">${esc(sup.email)}</a></span></div>`:""}
+        <div class="kv-row"><span class="kv-key">נוסף</span><span class="kv-val">${fmtDate(sup.dateAdded)}</span></div>
+        <div class="kv-row"><span class="kv-key">מוצרים</span><span class="kv-val">${products.length}</span></div>
+        <div class="kv-row"><span class="kv-key">דירוג ממוצע</span><span class="kv-val">${score.avg?score.avg.toFixed(1)+" ★":"—"}</span></div>
+      </div>
+    </div>
+
+    ${sup.notes?`<div class="list-section">
+      <div class="list-section-header">הערות</div>
+      <div class="list"><div class="form-row full"><div style="font-size:15px;line-height:21px">${nl2br(sup.notes)}</div></div></div>
+    </div>`:""}
+
+    <div class="btn-stack">
+      ${sup.phone ? `<a class="btn tinted" href="https://wa.me/${encodeURIComponent(sup.phone.replace(/[^\\d+]/g,""))}" target="_blank" rel="noopener">פתח ב-WhatsApp</a>`:""}
+      ${isActive
+        ? `<button class="btn" onclick='navigate("addProduct",{id:"${sup.id}"})'>+ הוסף מוצר</button>`
+        : `<button class="btn" id="resume">חדש סשן עם ספק זה</button>`}
+    </div>
+
+    ${products.length>0 ? `<div class="list-section">
+      <div class="list-section-header">מוצרים (${products.length})</div>
+      <div class="grid" id="grid" style="padding:0">${products.map(p=>productCard(p,sup)).join("")}</div>
+    </div>`:`<div class="muted padded" style="padding-top:20px;text-align:center">אין מוצרים לספק זה</div>`}
+
+    <div class="spacer-40"></div>
+  `;
+
+  $("#resume")?.addEventListener("click", async ()=>{
+    const sess = { id:uid(), supplierId:sup.id, dateAdded:Date.now(), productCount:0, notes:"" };
+    await idb.put("sessions", sess);
+    await setActiveSession(sess.id);
+    haptic("success");
+    navigate("addProduct",{id:sup.id});
+  });
+  $$(".pcard", app).forEach(c=>c.addEventListener("click", ()=>{
+    haptic("selection"); navigate("product",{id:c.dataset.id});
+  }));
+  attachScroll();
+}
+
+async function supplierMenu(id){
+  const choice = await actionSheet({
+    actions:[
+      {label:"ערוך ספק", value:"edit", bold:true},
+      {label:"מחק ספק וכל המוצרים", value:"del", destructive:true},
+    ]
+  });
+  if (choice==="edit") return editSupplierModal(id);
+  if (choice==="del")  return deleteSupplier(id);
+}
+
+async function editSupplierModal(id){
+  const sup = await idb.get("suppliers", id); if (!sup) return;
+  const m = document.createElement("div");
+  m.innerHTML = `
+    <div class="modal-bg" id="mbg"><div class="modal">
+      <div class="modal-head">
+        <button id="mcancel">ביטול</button>
+        <h2>עריכת ספק</h2>
+        <button class="bold" id="msave">שמור</button>
+      </div>
+      <div class="modal-body">
+        <div class="list-section"><div class="list">
+          <div class="form-row"><label class="flabel">שם</label><input class="finput" id="s-name" value="${esc(sup.name||'')}"></div>
+          <div class="form-row"><label class="flabel">ביתן</label><input class="finput" id="s-booth" value="${esc(sup.boothNumber||'')}"></div>
+          <div class="form-row"><label class="flabel">מדינה</label><input class="finput" id="s-country" value="${esc(sup.country||'')}"></div>
+        </div></div>
+        <div class="list-section"><div class="list">
+          <div class="form-row"><label class="flabel">איש קשר</label><input class="finput" id="s-contact" value="${esc(sup.contactPerson||'')}"></div>
+          <div class="form-row"><label class="flabel">טלפון</label><input class="finput" id="s-phone" dir="ltr" value="${esc(sup.phone||'')}"></div>
+          <div class="form-row"><label class="flabel">Email</label><input class="finput" id="s-email" dir="ltr" value="${esc(sup.email||'')}"></div>
+        </div></div>
+        <div class="list-section"><div class="list">
+          <div class="form-row full"><textarea class="ftext" id="s-notes">${esc(sup.notes||"")}</textarea></div>
+        </div></div>
+      </div>
+    </div></div>
+  `;
+  document.body.appendChild(m.firstElementChild);
+  const close = ()=>byId("mbg")?.remove();
+  $("#mcancel").onclick = close;
+  $("#mbg").addEventListener("click", e=>{ if(e.target.id==="mbg") close(); });
+  $("#msave").onclick = async ()=>{
+    sup.name=$("#s-name").value.trim();
+    sup.boothNumber=$("#s-booth").value.trim();
+    sup.country=$("#s-country").value.trim();
+    sup.contactPerson=$("#s-contact").value.trim();
+    sup.phone=$("#s-phone").value.trim();
+    sup.email=$("#s-email").value.trim();
+    sup.notes=$("#s-notes").value.trim();
+    await idb.put("suppliers", sup);
+    close(); haptic("success"); toast("עודכן"); render();
+  };
+}
+async function deleteSupplier(id){
+  const prods = (await idb.all("products")).filter(p=>p.supplierId===id);
+  if (!await confirmSheet(`למחוק ספק ו-${prods.length} מוצרים?`, "מחק", true)) return;
+  await Promise.all(prods.map(p=>idb.del("products",p.id)));
+  await idb.del("suppliers", id);
+  haptic("warn"); toast("נמחק"); navigate("suppliers",{},true);
+}
+
+/* ============================================================
+   REVIEW MODE
+   ============================================================ */
+async function renderReview(){
+  setNavbar({title:"ביקורת ערב", large:true});
+  const app = byId("app");
+  const all = (await idb.all("products")).sort((a,b)=>a.dateAdded-b.dateAdded);
+  const unrated = all.filter(p=>!p.reviewRating);
+  const suppliers = await idb.all("suppliers");
+  const supMap = Object.fromEntries(suppliers.map(s=>[s.id,s]));
+
+  if (all.length===0){
+    app.innerHTML = `<div class="empty">
+      <div class="em-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2.5l2.95 6.18 6.55.85-4.84 4.65 1.23 6.66L12 17.6l-5.89 3.24 1.23-6.66L2.5 9.53l6.55-.85L12 2.5z"/></svg>
+      </div>
+      <h2>אין מוצרים לביקורת</h2>
+      <p>אחרי שתאסוף מוצרים, חזור לכאן בערב לדרג אותם.</p>
+    </div>`;
+    return;
+  }
+  if (unrated.length===0){
+    app.innerHTML = `<div class="empty">
+      <div class="em-icon green" style="background:rgba(52,199,89,0.18);color:var(--systemGreen)">
+        <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>
+      </div>
+      <h2>הכל דורג!</h2>
+      <p>${all.length} מוצרים דורגו. ראה תובנות בסיכום.</p>
+      <button class="btn" onclick="navigate('summary')">צפה בסיכום</button>
+    </div>`;
+    return;
+  }
+
+  let idx = 0;
+  function show(){
+    const p = unrated[idx];
+    if (!p){ renderReview(); return; }
+    const sup = supMap[p.supplierId];
+    const photo = p.mainPhoto || (p.photos&&p.photos[0]);
+    const pct = Math.round((idx/unrated.length)*100);
+    app.innerHTML = `
+      <div class="review-progress"><span>${idx+1} מתוך ${unrated.length}</span><span>${esc((sup&&sup.name)||"")}</span></div>
+      <div class="review-progress-bar"><div style="width:${pct}%"></div></div>
+
+      <div class="review-card" id="rcard">
+        <div class="review-img" id="rimg">
+          ${photo?`<img src="${photo}">`:`<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#444;font-size:48px">📦</div>`}
+        </div>
+        <div class="review-info">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:6px">
+            <div style="font-size:20px;font-weight:700;letter-spacing:-0.013em">${p.price?esc(p.price)+" "+esc(p.currency||""):"ללא מחיר"}</div>
+            <span class="pill">${esc(catShort(p.category))}</span>
+          </div>
+          <div class="muted" dir="auto">${esc(p.size||"")} ${p.size&&sup?" · ":""} ${esc((sup&&sup.name)||"")}</div>
+          ${p.notes?`<div style="margin-top:10px;font-size:15px;line-height:20px">${nl2br(p.notes)}</div>`:""}
+        </div>
+      </div>
+
+      <div class="rating-big" id="rb">
+        ${[1,2,3,4,5].map(n=>`<button data-n="${n}">${n}</button>`).join("")}
+      </div>
+      <div class="list-section">
+        <div class="list"><div class="form-row full">
+          <textarea class="ftext" id="rn" placeholder="הערות (אופציונלי)..."></textarea>
+        </div></div>
+      </div>
+      <div class="btn-stack">
+        <button class="btn tinted" id="skip">דלג ➝</button>
+        <button class="btn gray" id="open">פתח מוצר</button>
+      </div>
+      <div class="spacer-40"></div>
+    `;
+
+    // swipe gestures
+    const card = $("#rcard");
+    let startX=null, dx=0;
+    card.addEventListener("touchstart", e=>{ startX = e.touches[0].clientX; dx=0; }, {passive:true});
+    card.addEventListener("touchmove", e=>{
+      if (startX===null) return;
+      dx = e.touches[0].clientX - startX;
+      card.style.transform = `translateX(${dx}px) rotate(${dx/30}deg)`;
+      card.style.opacity = String(1 - Math.min(1, Math.abs(dx)/300));
+    }, {passive:true});
+    card.addEventListener("touchend", async ()=>{
+      if (startX===null) return;
+      if (Math.abs(dx)>120){
+        // swipe = quick rate (left = 2★, right = 4★ — fast triage)
+        const n = dx>0 ? 4 : 2;
+        haptic("success");
+        card.classList.add(dx>0?"swipe-right":"swipe-left");
+        p.reviewRating = n; p.reviewNotes = $("#rn").value.trim();
+        await idb.put("products", p);
+        toast(`★${n}`);
+        setTimeout(()=>{ idx++; show(); }, 250);
+      } else {
+        card.style.transform = "";
+        card.style.opacity = "";
+      }
+      startX = null;
+    });
+
+    $$("#rb button").forEach(b=>b.addEventListener("click", async ()=>{
+      const n = +b.dataset.n;
+      haptic("success");
+      p.reviewRating = n; p.reviewNotes = $("#rn").value.trim();
+      await idb.put("products", p);
+      toast(`★${n}`);
+      idx++; show();
+    }));
+    $("#skip").addEventListener("click", ()=>{ haptic("selection"); idx++; show(); });
+    $("#open").addEventListener("click", ()=>navigate("product",{id:p.id}));
+  }
+  show();
+  attachScroll();
+}
+
+/* ============================================================
+   SUMMARY
+   ============================================================ */
+async function renderSummary(){
+  setNavbar({
+    title:"סיכום", large:true,
+    actions:[{label:"⚙", onClick:()=>navigate("settings")}]
+  });
+  const app = byId("app");
+  const [products, suppliers] = await Promise.all([idb.all("products"), idb.all("suppliers")]);
+  const supMap = Object.fromEntries(suppliers.map(s=>[s.id,s]));
+
+  const rated = products.filter(p=>p.reviewRating>0);
+  const top = [...products].filter(p=>p.reviewRating>=4).sort((a,b)=>b.reviewRating-a.reviewRating).slice(0,8);
+  const todayP = products.filter(p=>isToday(p.dateAdded));
+  const byCat = {};
+  products.forEach(p=>{ byCat[p.category||"other"] = (byCat[p.category||"other"]||0)+1; });
+
+  const supScores = suppliers.map(s=>{
+    const ps = products.filter(p=>p.supplierId===s.id);
+    return {sup:s, prods:ps, score: supplierScore(ps)};
+  });
+  const orderRank = {"Priority Supplier":4,"Strong Supplier":3,"Interesting":2,"Low Interest":1,"No Products":0};
+  const best = [...supScores].sort((a,b)=>{
+    const ra = orderRank[a.score.label]||0, rb = orderRank[b.score.label]||0;
+    if (rb!==ra) return rb-ra;
+    return b.score.avg - a.score.avg;
+  }).filter(x=>x.score.total>0).slice(0,10);
+
+  app.innerHTML = `
+    <div class="stat-grid">
+      <div class="stat"><div class="num">${products.length}</div><div class="lab">מוצרים</div></div>
+      <div class="stat"><div class="num">${suppliers.length}</div><div class="lab">ספקים</div></div>
+      <div class="stat"><div class="num">${rated.length}</div><div class="lab">דורגו</div></div>
+      <div class="stat"><div class="num">${todayP.length}</div><div class="lab">היום</div></div>
+    </div>
+
+    <div class="list-section">
+      <div class="list-section-header">מוצרים מובילים</div>
+      ${top.length ? `<div class="grid" style="padding:0">${top.map(p=>productCard(p,supMap[p.supplierId])).join("")}</div>` :
+        `<div class="list"><div class="form-row" style="justify-content:center;color:var(--secondaryLabel);text-align:center;padding:18px">אין עדיין מוצרים מדורגים ★4+</div></div>`}
+    </div>
+
+    <div class="list-section">
+      <div class="list-section-header">ספקי עדיפות</div>
+      ${best.length ? `<div class="list">${best.map(({sup,prods,score})=>{
+        const initial = (sup.name||"?").trim().charAt(0).toUpperCase();
+        return `<div class="supplier-row" data-id="${sup.id}" style="cursor:pointer">
+          <div class="savatar">${sup.businessCard?`<img src="${sup.businessCard}">`:esc(initial)}</div>
+          <div class="sinfo">
+            <div class="sname">${esc(sup.name||"ללא שם")}</div>
+            <div class="smeta">
+              <span>${prods.length} מוצרים</span>
+              ${score.avg?`<span>★ ${score.avg.toFixed(1)}</span>`:""}
+              ${score.strong?`<span>${score.strong} חזקים</span>`:""}
+            </div>
+          </div>
+          <span class="pill ${score.tone}">${esc(score.label)}</span>
+        </div>`;
+      }).join("")}</div>` : `<div class="list"><div class="form-row" style="justify-content:center;color:var(--secondaryLabel);padding:18px">אין עדיין ספקים</div></div>`}
+    </div>
+
+    <div class="list-section">
+      <div class="list-section-header">לפי קטגוריה</div>
+      <div class="list">
+        ${CATEGORIES.map(c=>{
+          const n = byCat[c.id]||0;
+          const pct = products.length ? Math.round(n*100/products.length) : 0;
+          return `<div class="form-row" style="justify-content:space-between">
+            <span>${esc(catShort(c.id))}</span>
+            <span style="display:flex;gap:10px;align-items:center">
+              <span class="muted">${pct}%</span>
+              <span style="font-weight:600;min-width:24px;text-align:end">${n}</span>
+            </span>
+          </div>`;
+        }).join("")}
+      </div>
+    </div>
+
+    <div class="list-section">
+      <div class="list-section-header">ייצוא</div>
+      <div class="list">
+        <div class="list-row tap" data-act="xlsx">
+          <div class="lead-icon green"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M9 13l2 2 4-4"/></svg></div>
+          <div class="row-main"><div class="row-title">Excel עם תמונות</div><div class="row-sub">.xlsx — תמונות מוטמעות</div></div>
+          <span class="row-chev"><svg viewBox="0 0 7 13"><path d="M1 1l5 5.5L1 12"/></svg></span>
+        </div>
+        <div class="list-row tap" data-act="csv">
+          <div class="lead-icon"><svg viewBox="0 0 24 24"><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div>
+          <div class="row-main"><div class="row-title">CSV</div><div class="row-sub">טקסט בלבד</div></div>
+          <span class="row-chev"><svg viewBox="0 0 7 13"><path d="M1 1l5 5.5L1 12"/></svg></span>
+        </div>
+        <div class="list-row tap" data-act="text">
+          <div class="lead-icon orange"><svg viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M8 13h8M8 17h6"/></svg></div>
+          <div class="row-main"><div class="row-title">סיכום טקסטואלי</div><div class="row-sub">.txt</div></div>
+          <span class="row-chev"><svg viewBox="0 0 7 13"><path d="M1 1l5 5.5L1 12"/></svg></span>
+        </div>
+        <div class="list-row tap" data-act="json">
+          <div class="lead-icon purple"><svg viewBox="0 0 24 24"><path d="M9 3H7a4 4 0 0 0-4 4v2a3 3 0 0 1-3 3 3 3 0 0 1 3 3v2a4 4 0 0 0 4 4h2"/><path d="M15 3h2a4 4 0 0 1 4 4v2a3 3 0 0 0 3 3 3 3 0 0 0-3 3v2a4 4 0 0 1-4 4h-2"/></svg></div>
+          <div class="row-main"><div class="row-title">גיבוי JSON</div><div class="row-sub">כולל תמונות, ניתן לייבוא</div></div>
+          <span class="row-chev"><svg viewBox="0 0 7 13"><path d="M1 1l5 5.5L1 12"/></svg></span>
+        </div>
+        <div class="list-row tap" data-act="import">
+          <div class="lead-icon gray"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5-5 5 5"/><path d="M12 5v12"/></svg></div>
+          <div class="row-main"><div class="row-title">ייבוא JSON</div><div class="row-sub">משחזר גיבוי</div></div>
+          <span class="row-chev"><svg viewBox="0 0 7 13"><path d="M1 1l5 5.5L1 12"/></svg></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="spacer-40"></div>
+  `;
+
+  $$(".supplier-row", app).forEach(r=>r.addEventListener("click", ()=>{
+    haptic("selection"); navigate("supplier",{id:r.dataset.id});
+  }));
+  $$(".pcard", app).forEach(c=>c.addEventListener("click", ()=>{
+    haptic("selection"); navigate("product",{id:c.dataset.id});
+  }));
+  $$("[data-act]", app).forEach(r=>r.addEventListener("click", ()=>{
+    haptic("selection");
+    const a = r.dataset.act;
+    if (a==="xlsx") return exportXLSX();
+    if (a==="csv")  return exportCSV();
+    if (a==="text") return exportSummary();
+    if (a==="json") return exportJSON();
+    if (a==="import") return importJSON();
+  }));
+  attachScroll();
+}
+
+/* ============================================================
+   SETTINGS
+   ============================================================ */
+async function renderSettings(){
+  setNavbar({title:"הגדרות", back:true});
+  const app = byId("app");
+  const [products, suppliers, sessions] = await Promise.all([idb.all("products"),idb.all("suppliers"),idb.all("sessions")]);
+  app.innerHTML = `
+    <div class="list-section">
+      <div class="list-section-header">אודות</div>
+      <div class="list kv">
+        <div class="kv-row"><span class="kv-key">אפליקציה</span><span class="kv-val">Trade Fair Capture · iOS</span></div>
+        <div class="kv-row"><span class="kv-key">מוצרים</span><span class="kv-val">${products.length}</span></div>
+        <div class="kv-row"><span class="kv-key">ספקים</span><span class="kv-val">${suppliers.length}</span></div>
+        <div class="kv-row"><span class="kv-key">סשנים</span><span class="kv-val">${sessions.length}</span></div>
+      </div>
+    </div>
+
+    <div class="list-section">
+      <div class="list-section-header">התקנה לאייפון</div>
+      <div class="list-section-footer" style="padding-top:12px;line-height:21px">
+        כדי להתקין כאפליקציה: פתח ב-Safari → לחץ על אייקון השיתוף בתחתית → "Add to Home Screen". האפליקציה תופיע על מסך הבית ותפתח מסך מלא.
+      </div>
+    </div>
+
+    <div class="btn-stack">
+      <button class="btn destructive" id="wipe">מחק את כל הנתונים</button>
+    </div>
+    <div class="spacer-40"></div>
+  `;
+  $("#wipe").addEventListener("click", async ()=>{
+    if (!await confirmSheet("מחיקת כל הנתונים. אין דרך חזרה.","מחק הכל",true)) return;
+    if (!await confirmSheet("בטוח לחלוטין?","כן, מחק",true)) return;
+    await idb.clear("products");
+    await idb.clear("suppliers");
+    await idb.clear("sessions");
+    await idb.clear("kv");
+    State.activeSessionId = null;
+    haptic("warn");
+    toast("הכל נמחק");
+    navigate("gallery",{},true);
+  });
+  attachScroll();
+}
+
+/* ============================================================
+   EXPORTS
+   ============================================================ */
+function downloadFile(filename, content, mime="application/json"){
+  const blob = (content instanceof Blob) ? content : new Blob([content],{type:mime});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url), 1500);
+}
+async function exportJSON(){
+  const [suppliers,products,sessions] = await Promise.all([idb.all("suppliers"),idb.all("products"),idb.all("sessions")]);
+  const stamp = new Date().toISOString().slice(0,10);
+  downloadFile(`tradefair-${stamp}.json`, JSON.stringify({version:1, exportedAt:Date.now(), suppliers, products, sessions}, null, 2));
+  haptic("success"); toast("יוצא ✓");
+}
+async function exportCSV(){
+  const [products, suppliers] = await Promise.all([idb.all("products"), idb.all("suppliers")]);
+  const supMap = Object.fromEntries(suppliers.map(s=>[s.id,s]));
+  const q = v => `"${String(v==null?"":v).replace(/"/g,'""')}"`;
+  const rows = [["Supplier","Booth","Country","Phone","Email","Product","Category","Price","Currency","Size","Rating","Notes","Review Notes","Date"].map(q).join(",")];
+  products.forEach(p=>{
+    const s = supMap[p.supplierId]||{};
+    rows.push([s.name||"", s.boothNumber||"", s.country||"", s.phone||"", s.email||"", p.name||"", catShort(p.category), p.price||"", p.currency||"", p.size||"", p.reviewRating||"", p.notes||"", p.reviewNotes||"", new Date(p.dateAdded).toISOString()].map(q).join(","));
+  });
+  const stamp = new Date().toISOString().slice(0,10);
+  downloadFile(`tradefair-${stamp}.csv`, "\uFEFF"+rows.join("\n"), "text/csv");
+  haptic("success"); toast("יוצא ✓");
+}
+async function exportSummary(){
+  const [products, suppliers] = await Promise.all([idb.all("products"), idb.all("suppliers")]);
+  const supMap = Object.fromEntries(suppliers.map(s=>[s.id,s]));
+  const lines = [];
+  lines.push("Trade Fair Summary");
+  lines.push("==================");
+  lines.push(`Date: ${new Date().toLocaleDateString()}`);
+  lines.push(`Products: ${products.length}  |  Suppliers: ${suppliers.length}`);
+  lines.push("");
+  const supScores = suppliers.map(s=>{
+    const ps = products.filter(p=>p.supplierId===s.id);
+    return {sup:s, prods:ps, score: supplierScore(ps)};
+  }).filter(x=>x.score.total>0).sort((a,b)=>b.score.avg-a.score.avg);
+
+  lines.push("-- Priority Suppliers --");
+  supScores.filter(x=>x.score.label==="Priority Supplier").forEach(x=>{
+    lines.push(`★ ${x.sup.name||"-"} – ${x.prods.length} products, avg ${x.score.avg.toFixed(1)}, ${x.score.strong} strong`);
+    if (x.sup.boothNumber) lines.push(`  Booth: ${x.sup.boothNumber}`);
+    if (x.sup.phone) lines.push(`  Phone: ${x.sup.phone}`);
+    if (x.sup.email) lines.push(`  Email: ${x.sup.email}`);
+  });
+  lines.push("");
+  lines.push("-- Strong Suppliers --");
+  supScores.filter(x=>x.score.label==="Strong Supplier").forEach(x=>{
+    lines.push(`• ${x.sup.name||"-"} – ${x.prods.length} products, avg ${x.score.avg.toFixed(1)}`);
+  });
+  lines.push("");
+  lines.push("-- Top Products (★4+) --");
+  products.filter(p=>p.reviewRating>=4).sort((a,b)=>b.reviewRating-a.reviewRating).forEach(p=>{
+    const s = supMap[p.supplierId];
+    lines.push(`★${p.reviewRating}  ${p.name||catShort(p.category)}  ${p.price||""} ${p.currency||""}  –  ${(s&&s.name)||""}`);
+    if (p.size) lines.push(`       size: ${p.size}`);
+    if (p.notes) lines.push(`       ${p.notes}`);
+  });
+
+  const stamp = new Date().toISOString().slice(0,10);
+  downloadFile(`tradefair-summary-${stamp}.txt`, lines.join("\n"), "text/plain");
+  haptic("success"); toast("יוצא ✓");
+}
+async function exportXLSX(){
+  if (!window.ExcelJS){ alert("טעינת ספריית Excel נכשלה. דרושה התחברות לאינטרנט פעם ראשונה."); return; }
+  toast("בונה Excel...");
+  const [products, suppliers] = await Promise.all([idb.all("products"), idb.all("suppliers")]);
+  const supMap = Object.fromEntries(suppliers.map(s=>[s.id,s]));
+
+  const wb = new ExcelJS.Workbook();
+  wb.creator = "Trade Fair Capture";
+  wb.created = new Date();
+
+  const ws = wb.addWorksheet("Products", { views:[{rightToLeft:true}] });
+  ws.addRow(["#","Photo","Supplier","Booth","Country","Product","Category","Price","Currency","Size","Rating","Notes","Review Notes","Date"]);
+  const hr = ws.getRow(1);
+  hr.font={bold:true,color:{argb:"FFFFFFFF"}}; hr.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF0F172A"}}; hr.height=26;
+  hr.alignment={vertical:"middle",horizontal:"center"};
+  ws.columns=[{width:5},{width:18},{width:24},{width:9},{width:12},{width:24},{width:14},{width:10},{width:9},{width:14},{width:8},{width:36},{width:30},{width:14}];
+
+  const sorted = [...products].sort((a,b)=>{
+    const sa=(supMap[a.supplierId]||{}).name||"";
+    const sb=(supMap[b.supplierId]||{}).name||"";
+    if (sa!==sb) return sa.localeCompare(sb);
+    return a.dateAdded-b.dateAdded;
+  });
+  for (let i=0;i<sorted.length;i++){
+    const p=sorted[i];
+    const s=supMap[p.supplierId]||{};
+    const r=ws.addRow([i+1,"",s.name||"",s.boothNumber||"",s.country||"",p.name||"",catShort(p.category),p.price||"",p.currency||"",p.size||"",p.reviewRating||"",p.notes||"",p.reviewNotes||"",new Date(p.dateAdded).toLocaleString("he-IL")]);
+    r.height=95; r.alignment={vertical:"middle",wrapText:true};
+    if (i%2===1) r.eachCell(c=>c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFF7F7F6"}});
+    if (p.reviewRating>=4){ r.getCell(11).fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFDCFCE7"}}; r.getCell(11).font={bold:true,color:{argb:"FF166534"}}; }
+    const photo = p.mainPhoto||(p.photos&&p.photos[0]);
+    if (photo){
+      try{
+        const m = photo.match(/^data:image\/(\w+);base64,(.+)$/);
+        if (m){
+          const ext=(m[1]==="jpg"?"jpeg":m[1]).toLowerCase();
+          const id=wb.addImage({base64:m[2],extension:ext});
+          ws.addImage(id,{tl:{col:1.05,row:r.number-1+0.05},ext:{width:120,height:120},editAs:"oneCell"});
+        }
+      }catch(e){}
+    }
+  }
+  ws.views=[{state:"frozen",ySplit:1,rightToLeft:true}];
+
+  const ws2 = wb.addWorksheet("Suppliers",{views:[{rightToLeft:true}]});
+  ws2.addRow(["#","Card","Supplier","Contact","Phone","Email","Booth","Country","Products","Avg","Strong","Priority","Notes","Date"]);
+  const hr2=ws2.getRow(1); hr2.font={bold:true,color:{argb:"FFFFFFFF"}}; hr2.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF0F172A"}}; hr2.height=26;
+  hr2.alignment={vertical:"middle",horizontal:"center"};
+  ws2.columns=[{width:5},{width:24},{width:22},{width:18},{width:18},{width:24},{width:9},{width:12},{width:10},{width:8},{width:9},{width:18},{width:32},{width:14}];
+
+  const supSorted = suppliers.slice().sort((a,b)=>(b.dateAdded||0)-(a.dateAdded||0));
+  for (let i=0;i<supSorted.length;i++){
+    const s=supSorted[i];
+    const ps=products.filter(p=>p.supplierId===s.id);
+    const sc=supplierScore(ps);
+    const r=ws2.addRow([i+1,"",s.name||"",s.contactPerson||"",s.phone||"",s.email||"",s.boothNumber||"",s.country||"",ps.length,sc.avg?Number(sc.avg.toFixed(2)):"",sc.strong||"",sc.label,s.notes||"",new Date(s.dateAdded).toLocaleDateString("he-IL")]);
+    r.height=110; r.alignment={vertical:"middle",wrapText:true};
+    if (i%2===1) r.eachCell(c=>c.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFF7F7F6"}});
+    if (sc.label==="Priority Supplier"){ r.getCell(12).fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF0F172A"}}; r.getCell(12).font={bold:true,color:{argb:"FFFFFFFF"}}; }
+    else if (sc.label==="Strong Supplier"){ r.getCell(12).fill={type:"pattern",pattern:"solid",fgColor:{argb:"FFDCFCE7"}}; r.getCell(12).font={bold:true,color:{argb:"FF166534"}}; }
+    if (s.businessCard){
+      try{
+        const m = s.businessCard.match(/^data:image\/(\w+);base64,(.+)$/);
+        if (m){
+          const ext=(m[1]==="jpg"?"jpeg":m[1]).toLowerCase();
+          const id=wb.addImage({base64:m[2],extension:ext});
+          ws2.addImage(id,{tl:{col:1.05,row:r.number-1+0.05},ext:{width:160,height:130},editAs:"oneCell"});
+        }
+      }catch(e){}
+    }
+  }
+  ws2.views=[{state:"frozen",ySplit:1,rightToLeft:true}];
+
+  const ws3 = wb.addWorksheet("All Photos",{views:[{rightToLeft:true}]});
+  ws3.addRow(["#","Photo","Supplier","Product","Category","Price","Size","Rating"]);
+  const hr3=ws3.getRow(1); hr3.font={bold:true,color:{argb:"FFFFFFFF"}}; hr3.fill={type:"pattern",pattern:"solid",fgColor:{argb:"FF0F172A"}}; hr3.height=26;
+  ws3.columns=[{width:5},{width:18},{width:22},{width:22},{width:14},{width:10},{width:14},{width:8}];
+  let n=0;
+  for (const p of sorted){
+    const sup=supMap[p.supplierId]||{};
+    const phs = (p.photos&&p.photos.length)?p.photos:(p.mainPhoto?[p.mainPhoto]:[]);
+    for (const photo of phs){
+      n++;
+      const r=ws3.addRow([n,"",sup.name||"",p.name||catShort(p.category),catShort(p.category),p.price?p.price+" "+(p.currency||""):"",p.size||"",p.reviewRating||""]);
+      r.height=95; r.alignment={vertical:"middle",wrapText:true};
+      try{
+        const m = photo.match(/^data:image\/(\w+);base64,(.+)$/);
+        if (m){
+          const ext=(m[1]==="jpg"?"jpeg":m[1]).toLowerCase();
+          const id=wb.addImage({base64:m[2],extension:ext});
+          ws3.addImage(id,{tl:{col:1.05,row:r.number-1+0.05},ext:{width:120,height:120},editAs:"oneCell"});
+        }
+      }catch(e){}
+    }
+  }
+  ws3.views=[{state:"frozen",ySplit:1,rightToLeft:true}];
+
+  const buf = await wb.xlsx.writeBuffer();
+  const blob = new Blob([buf],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"});
+  const stamp = new Date().toISOString().slice(0,10);
+  downloadFile(`tradefair-${stamp}.xlsx`, blob);
+  haptic("success"); toast("Excel נוצר ✓");
+}
+
+function importJSON(){
+  const inp = document.createElement("input");
+  inp.type="file"; inp.accept=".json,application/json";
+  inp.onchange = async ()=>{
+    const f = inp.files[0]; if(!f) return;
+    try{
+      const d = JSON.parse(await f.text());
+      if (!d.products && !d.suppliers){ alert("קובץ לא תקין"); return; }
+      if (!await confirmSheet("ייבוא יוסיף/יעדכן נתונים. להמשיך?","ייבא")) return;
+      for (const s of (d.suppliers||[])) await idb.put("suppliers", s);
+      for (const p of (d.products||[])) await idb.put("products", p);
+      for (const ss of (d.sessions||[])) await idb.put("sessions", ss);
+      haptic("success"); toast("יובא ✓"); render();
+    }catch(err){ alert("שגיאה: "+err.message); }
+  };
+  inp.click();
+}
+
+/* ============================================================
+   Boot
+   ============================================================ */
+window.navigate = navigate;
+
+byId("tabbar").querySelectorAll(".tab").forEach(b=>{
+  b.addEventListener("click", ()=>{
+    haptic("selection");
+    const t = b.dataset.tab;
+    if (t==="capture" && !State.activeSessionId) return navigate("session");
+    navigate(t);
+  });
+});
+
+// Prevent iOS double-tap zoom
+let lastTouch = 0;
+document.addEventListener("touchend", e=>{
+  const now = Date.now();
+  if (now - lastTouch <= 300) e.preventDefault();
+  lastTouch = now;
+}, {passive:false});
+
+(async function boot(){
+  await openDB();
+  await loadActiveSession();
+  parseHash();
+  render();
+})();
+</script>
+</body>
+</html>
