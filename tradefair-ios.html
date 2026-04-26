@@ -719,6 +719,326 @@ img{display:block;max-width:100%}
 }
 @keyframes spin{to{transform:rotate(360deg)}}
 
+/* ============================================================
+   Document Scanner
+   ============================================================ */
+.scan-bg{
+  position:fixed;inset:0;z-index:300;
+  background:#000;
+  display:flex;flex-direction:column;
+  animation:fadeIn .25s ease;
+}
+.scan-stage{
+  flex:1;position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  touch-action:none;-webkit-user-select:none;user-select:none;
+}
+.scan-stage canvas{display:block;background:#000}
+.scan-stage svg{
+  position:absolute;
+  pointer-events:none;
+  overflow:visible;
+}
+.scan-corner{
+  position:absolute;
+  width:44px;height:44px;
+  margin-left:-22px;margin-top:-22px;
+  border-radius:50%;
+  background:rgba(255,255,255,0.96);
+  box-shadow:0 0 0 2px var(--tint),0 4px 14px rgba(0,0,0,0.5);
+  cursor:grab;
+  z-index:6;
+  touch-action:none;
+}
+.scan-corner::before{
+  content:"";position:absolute;inset:13px;
+  border-radius:50%;background:var(--tint);
+}
+.scan-corner.dragging{
+  cursor:grabbing;
+  transform:scale(1.18);
+  box-shadow:0 0 0 3px var(--tint),0 6px 20px rgba(0,0,0,0.6);
+}
+.scan-bar{
+  background:#000;
+  padding:14px 16px calc(14px + var(--safe-bottom));
+  display:flex;align-items:center;gap:10px;
+  border-top:0.5px solid rgba(255,255,255,0.12);
+}
+.scan-bar > button{
+  font-size:17px;color:#fff;
+  padding:10px 16px;border-radius:10px;
+  background:rgba(255,255,255,0.12);
+  font-weight:500;letter-spacing:-0.011em;
+}
+.scan-bar > button:active{background:rgba(255,255,255,0.22)}
+.scan-bar > button.primary{
+  background:var(--tint);font-weight:600;
+  padding:10px 22px;
+}
+.scan-filters{
+  flex:1;display:flex;justify-content:center;gap:4px;
+  background:rgba(255,255,255,0.10);
+  border-radius:10px;padding:3px;
+}
+.scan-filters button{
+  flex:1;max-width:96px;
+  padding:7px 10px;font-size:13px;
+  background:transparent;color:#fff;
+  border-radius:7px;font-weight:500;
+}
+.scan-filters button.active{
+  background:rgba(255,255,255,0.22);font-weight:600;
+}
+.scan-progress{
+  position:absolute;inset:0;z-index:7;
+  background:rgba(0,0,0,0.75);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:14px;color:#fff;font-size:14px;
+}
+.scan-progress .spinner{width:32px;height:32px;border-width:3px;border-color:rgba(255,255,255,0.2);border-top-color:#fff}
+.scan-hint{
+  position:absolute;top:16px;left:50%;transform:translateX(-50%);
+  background:rgba(0,0,0,0.6);color:#fff;
+  padding:8px 14px;border-radius:999px;
+  font-size:13px;letter-spacing:-0.001em;
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  z-index:5;pointer-events:none;
+  animation:hintFade .35s ease;
+}
+@keyframes hintFade{from{opacity:0;transform:translateX(-50%) translateY(-6px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+@media (min-width:768px){
+  .scan-corner{width:50px;height:50px;margin-left:-25px;margin-top:-25px}
+  .scan-corner::before{inset:15px}
+  .scan-bar{padding:18px 24px calc(18px + var(--safe-bottom))}
+  .scan-bar > button{font-size:18px;padding:12px 20px}
+  .scan-filters button{font-size:14px;padding:8px 14px;max-width:120px}
+  .scan-hint{font-size:14px;padding:9px 16px;top:20px}
+}
+
+/* ============================================================
+   Responsive — iPad / tablets (768px+)
+   Same code, bigger layout, no JS changes.
+   ============================================================ */
+@media (min-width: 768px){
+  :root{
+    --nav-h:50px;
+    --large-title-h:60px;
+    --tab-h:60px;
+    --row-h:48px;
+  }
+  body{font-size:18px;line-height:24px}
+
+  /* Centered content with max-width — keeps lines readable on wide screens */
+  .navbar > .nav-row{
+    max-width:900px;margin-inline:auto;
+  }
+  .large-title{
+    max-width:900px;margin-inline:auto;
+    padding:10px 28px 12px;
+    font-size:42px;line-height:48px;
+  }
+  .tabbar{
+    max-width:900px;margin-inline:auto;
+    border-left:0.5px solid var(--separator);
+    border-right:0.5px solid var(--separator);
+  }
+  .banner{padding:11px 28px;font-size:15px}
+  .app.has-banner{padding-top:calc(var(--safe-top) + var(--nav-h) + 42px)}
+  .app.has-banner.has-large{padding-top:calc(var(--safe-top) + var(--nav-h) + var(--large-title-h) + 42px)}
+
+  /* Tab bar — bigger touch targets and labels */
+  .tab svg{width:28px;height:28px}
+  .tab.center svg{width:38px;height:38px}
+  .tab span{font-size:11px}
+  .tab{font-size:11px}
+
+  /* Nav row */
+  .nav-row{padding:0 16px}
+  .nav-back, .nav-action{font-size:18px;padding:6px 12px}
+  .nav-back svg{width:14px;height:23px}
+  .nav-title{font-size:18px}
+
+  /* Lists wider but capped for readability */
+  .list-section{margin:0 auto 26px;max-width:760px;padding:0 28px}
+  .list-section.full{max-width:none;padding:0 28px}
+  .list{box-shadow:0 0 0 0.5px var(--separator),0 1px 3px rgba(0,0,0,0.04)}
+  .list-row{padding:13px 20px;font-size:18px}
+  .list-row .row-title{font-size:18px}
+  .list-row .row-sub{font-size:14px}
+  .list-row .row-value{font-size:18px}
+
+  /* Forms */
+  .form-row{padding:13px 20px}
+  .form-row .flabel{font-size:18px;min-width:110px}
+  .form-row .finput{font-size:18px}
+  .form-row.full .ftext{min-height:120px;font-size:18px}
+
+  /* Search / segmented / chips — centered, max-width */
+  .search-wrap{max-width:760px;margin-inline:auto;padding:0 28px 10px}
+  .search{height:42px;padding:10px 14px}
+  .search input{font-size:18px}
+  .search svg{width:18px;height:18px}
+  .segmented{max-width:760px;margin:0 auto 10px;width:calc(100% - 56px)}
+  .segmented button{height:36px;font-size:14px}
+  .chip-row{padding:10px 28px 16px;justify-content:flex-start}
+  .chip{height:38px;padding:0 16px;font-size:15px;border-radius:19px}
+
+  /* Product gallery — 5 columns on iPad portrait */
+  .grid{
+    grid-template-columns:repeat(5,1fr);
+    gap:16px;padding:0 28px 16px;
+  }
+  .pcard .body{padding:11px 13px 13px}
+  .pcard .price{font-size:16px}
+  .pcard .meta{font-size:13px}
+  .pcard .badge-rating{font-size:12px;padding:3px 9px}
+  .pcard .badge-cat{font-size:11px;padding:3px 8px}
+
+  /* Photo capture grid — 6 columns (instead of 3) */
+  .photo-grid{
+    grid-template-columns:repeat(6,1fr);
+    gap:10px;padding:0 28px 6px;
+  }
+  /* Big photo (business card) — capped width, taller */
+  .bigphoto{
+    margin:0 auto;
+    max-width:760px;
+    width:calc(100% - 56px);
+  }
+  .bigphoto .add-block{font-size:15px}
+  .bigphoto .add-block svg{width:32px;height:32px}
+
+  /* Stat grid — 4 columns instead of 2 */
+  .stat-grid{
+    grid-template-columns:repeat(4,1fr);
+    max-width:760px;margin-inline:auto;padding:0 28px;gap:14px;
+  }
+  .stat{padding:18px}
+  .stat .num{font-size:32px;line-height:38px}
+  .stat .lab{font-size:14px}
+
+  /* Suppliers list */
+  .supplier-row{padding:14px 28px}
+  .supplier-row + .supplier-row::before{inset-inline-start:96px;inset-inline-end:28px}
+  .savatar{width:60px;height:60px;font-size:24px;border-radius:16px}
+  .sname{font-size:18px}
+  .smeta{font-size:14px}
+
+  /* Product detail */
+  .detail-photo{
+    margin:0 auto;
+    max-width:600px;
+    width:calc(100% - 56px);
+  }
+  .detail-thumbs{padding:14px 28px;justify-content:center}
+  .detail-thumbs button{width:72px;height:72px;border-radius:10px}
+
+  /* KV rows */
+  .kv .kv-row{padding:13px 20px;min-height:48px}
+  .kv .kv-key{font-size:18px}
+  .kv .kv-val{font-size:18px}
+
+  /* Stars */
+  .stars{padding:8px 0;gap:8px}
+  .stars button{width:48px;height:48px;font-size:30px}
+  .rating-big{padding:10px 28px;max-width:760px;margin-inline:auto;gap:10px}
+  .rating-big button{height:68px;font-size:24px;border-radius:16px}
+
+  /* Review mode */
+  .review-card{
+    margin:0 auto;
+    max-width:560px;
+    border-radius:22px;
+  }
+  .review-progress{
+    max-width:560px;margin-inline:auto;
+    padding:14px 0 6px;font-size:14px;
+  }
+  .review-progress-bar{
+    max-width:560px;margin:0 auto 10px;height:4px;
+  }
+  .review-info{padding:18px 22px}
+
+  /* Buttons */
+  .btn{height:54px;font-size:18px;border-radius:14px}
+  .btn-stack{padding:0 28px;max-width:480px;margin-inline:auto}
+  .btn.compact{height:38px;font-size:15px}
+
+  /* Padded helpers */
+  .padded{padding:0 28px;max-width:760px;margin-inline:auto}
+  .danger-zone{padding:0 28px;max-width:760px;margin-inline:auto}
+
+  /* Empty state */
+  .empty{padding:90px 28px}
+  .empty .em-icon{width:80px;height:80px;border-radius:18px}
+  .empty .em-icon svg{width:40px;height:40px}
+  .empty h2{font-size:26px}
+  .empty p{font-size:17px;max-width:360px}
+  .empty .btn{max-width:340px}
+
+  /* Toast */
+  .toast{font-size:15px;padding:13px 22px}
+
+  /* Modal already responsive at 560px+, just refine */
+  .modal{max-width:600px;max-height:84vh}
+  .modal-head{padding:16px 22px}
+  .modal-head h2{font-size:18px}
+
+  /* Section header / footer */
+  .list-section-header{font-size:14px;padding:16px 4px 8px}
+  .list-section-footer{font-size:14px}
+
+  /* Pills */
+  .pill{font-size:14px;padding:4px 12px}
+}
+
+/* Larger iPad / iPad Pro 11" portrait, 12.9" portrait */
+@media (min-width: 1024px){
+  .navbar > .nav-row{max-width:1000px}
+  .large-title{max-width:1000px;padding:10px 32px 12px}
+  .tabbar{max-width:1000px}
+
+  /* Product gallery — 6 columns */
+  .grid{
+    grid-template-columns:repeat(6,1fr);
+    gap:18px;padding:0 32px 18px;
+  }
+  /* Photo capture — 8 columns */
+  .photo-grid{
+    grid-template-columns:repeat(8,1fr);
+    gap:12px;padding:0 32px 6px;
+  }
+
+  /* Wider content blocks */
+  .list-section{max-width:840px;padding:0 32px}
+  .stat-grid{max-width:840px;padding:0 32px}
+  .search-wrap{max-width:840px;padding:0 32px 10px}
+  .segmented{max-width:840px;width:calc(100% - 64px)}
+  .padded, .danger-zone{max-width:840px;padding:0 32px}
+  .chip-row{padding:10px 32px 16px}
+  .rating-big{max-width:840px;padding:10px 32px}
+  .bigphoto{max-width:840px;width:calc(100% - 64px)}
+  .detail-photo{max-width:680px;width:calc(100% - 64px)}
+  .detail-thumbs{padding:14px 32px}
+  .supplier-row{padding:14px 32px}
+  .supplier-row + .supplier-row::before{inset-inline-start:108px;inset-inline-end:32px}
+
+  /* Bigger review card */
+  .review-card{max-width:640px}
+  .review-progress, .review-progress-bar{max-width:640px}
+
+  /* Modal a bit wider on iPad Pro */
+  .modal{max-width:640px}
+}
+
+/* iPad Pro 12.9" landscape and Mac */
+@media (min-width: 1280px){
+  .grid{grid-template-columns:repeat(6,1fr);max-width:1200px;margin-inline:auto;gap:20px}
+  .photo-grid{max-width:900px;margin-inline:auto;padding:0 0 6px}
+}
+
 </style>
 </head>
 <body>
@@ -856,6 +1176,347 @@ function resizePhoto(file, maxDim=1400, q=.8){
       img.src = r.result;
     };
     r.readAsDataURL(file);
+  });
+}
+
+/* ============================================================
+   Document Scanner — manual 4-corner perspective correction
+   ============================================================ */
+
+/* Solve 8x8 linear system Ax=B by Gauss-Jordan with partial pivoting.
+   Returns x as Float64Array(8) or null if singular. */
+function solveLinear(A, B){
+  const n = 8;
+  const M = new Float64Array(n*9);
+  for (let i=0;i<n;i++){
+    for (let j=0;j<n;j++) M[i*9+j] = A[i*n+j];
+    M[i*9+8] = B[i];
+  }
+  for (let i=0;i<n;i++){
+    let piv = i, max = Math.abs(M[i*9+i]);
+    for (let r=i+1;r<n;r++){
+      const v = Math.abs(M[r*9+i]);
+      if (v > max){ max = v; piv = r; }
+    }
+    if (max < 1e-12) return null;
+    if (piv !== i){
+      for (let c=i;c<=n;c++){
+        const t = M[i*9+c]; M[i*9+c] = M[piv*9+c]; M[piv*9+c] = t;
+      }
+    }
+    const inv = 1 / M[i*9+i];
+    for (let c=i;c<=n;c++) M[i*9+c] *= inv;
+    for (let r=0;r<n;r++){
+      if (r===i) continue;
+      const f = M[r*9+i];
+      if (f===0) continue;
+      for (let c=i;c<=n;c++) M[r*9+c] -= f * M[i*9+c];
+    }
+  }
+  const x = new Float64Array(n);
+  for (let i=0;i<n;i++) x[i] = M[i*9+8];
+  return x;
+}
+
+/* Compute homography H (3x3) that maps src[i]->dst[i], i=0..3.
+   Each point pair gives 2 equations. Returns Float64Array(9) or null. */
+function computeHomography(src, dst){
+  const A = new Float64Array(64);
+  const B = new Float64Array(8);
+  for (let i=0;i<4;i++){
+    const x = src[i].x, y = src[i].y, X = dst[i].x, Y = dst[i].y;
+    const r1 = i*2, r2 = i*2+1;
+    A[r1*8+0]=x; A[r1*8+1]=y; A[r1*8+2]=1;
+    A[r1*8+3]=0; A[r1*8+4]=0; A[r1*8+5]=0;
+    A[r1*8+6]=-x*X; A[r1*8+7]=-y*X;
+    B[r1]=X;
+    A[r2*8+0]=0; A[r2*8+1]=0; A[r2*8+2]=0;
+    A[r2*8+3]=x; A[r2*8+4]=y; A[r2*8+5]=1;
+    A[r2*8+6]=-x*Y; A[r2*8+7]=-y*Y;
+    B[r2]=Y;
+  }
+  const h = solveLinear(A, B);
+  if (!h) return null;
+  return new Float64Array([h[0],h[1],h[2],h[3],h[4],h[5],h[6],h[7],1]);
+}
+
+/* Apply inverse homography to sample source image into output of size outW x outH.
+   srcImgData: ImageData of source. H maps src->dst, so we invert and sample. */
+function applyHomography(srcImgData, H, outW, outH){
+  /* Invert 3x3 matrix H */
+  const a=H[0],b=H[1],c=H[2],d=H[3],e=H[4],f=H[5],g=H[6],h=H[7],i=H[8];
+  const det = a*(e*i - f*h) - b*(d*i - f*g) + c*(d*h - e*g);
+  if (Math.abs(det) < 1e-12) return null;
+  const inv = 1/det;
+  const Hi = new Float64Array([
+    (e*i - f*h)*inv, (c*h - b*i)*inv, (b*f - c*e)*inv,
+    (f*g - d*i)*inv, (a*i - c*g)*inv, (c*d - a*f)*inv,
+    (d*h - e*g)*inv, (b*g - a*h)*inv, (a*e - b*d)*inv
+  ]);
+  const sw = srcImgData.width, sh = srcImgData.height;
+  const sd = srcImgData.data;
+  const out = new ImageData(outW, outH);
+  const od = out.data;
+  for (let y=0;y<outH;y++){
+    for (let x=0;x<outW;x++){
+      const w = Hi[6]*x + Hi[7]*y + Hi[8];
+      if (Math.abs(w) < 1e-12) continue;
+      const sx = (Hi[0]*x + Hi[1]*y + Hi[2]) / w;
+      const sy = (Hi[3]*x + Hi[4]*y + Hi[5]) / w;
+      if (sx < 0 || sy < 0 || sx >= sw-1 || sy >= sh-1) continue;
+      const x0 = Math.floor(sx), y0 = Math.floor(sy);
+      const fx = sx - x0, fy = sy - y0;
+      const p00 = (y0*sw + x0)*4;
+      const p10 = p00 + 4;
+      const p01 = p00 + sw*4;
+      const p11 = p01 + 4;
+      const w00 = (1-fx)*(1-fy), w10 = fx*(1-fy), w01 = (1-fx)*fy, w11 = fx*fy;
+      const di = (y*outW + x)*4;
+      od[di]   = sd[p00]*w00 + sd[p10]*w10 + sd[p01]*w01 + sd[p11]*w11;
+      od[di+1] = sd[p00+1]*w00 + sd[p10+1]*w10 + sd[p01+1]*w01 + sd[p11+1]*w11;
+      od[di+2] = sd[p00+2]*w00 + sd[p10+2]*w10 + sd[p01+2]*w01 + sd[p11+2]*w11;
+      od[di+3] = 255;
+    }
+  }
+  return out;
+}
+
+/* Document filter — boost contrast, slight desaturation for text clarity.
+   Operates in-place on ImageData. */
+function filterDocument(imgData){
+  const d = imgData.data;
+  for (let i=0;i<d.length;i+=4){
+    const r=d[i], g=d[i+1], b=d[i+2];
+    const lum = 0.299*r + 0.587*g + 0.114*b;
+    /* Mix toward luminance (desaturate ~30%) */
+    let nr = r*0.7 + lum*0.3;
+    let ng = g*0.7 + lum*0.3;
+    let nb = b*0.7 + lum*0.3;
+    /* Contrast boost around 128 */
+    const k = 1.35;
+    nr = (nr - 128)*k + 132;
+    ng = (ng - 128)*k + 132;
+    nb = (nb - 128)*k + 132;
+    d[i]   = nr<0?0:nr>255?255:nr;
+    d[i+1] = ng<0?0:ng>255?255:ng;
+    d[i+2] = nb<0?0:nb>255?255:nb;
+  }
+}
+
+/* Open scanner modal for `file`. Returns Promise resolving to JPEG dataURL or null on cancel. */
+function scanDocument(file){
+  return new Promise(async (resolve)=>{
+    let baseDataURL;
+    try {
+      baseDataURL = await resizePhoto(file, 1600, .92);
+    } catch(err){
+      resolve(null); return;
+    }
+    const baseImg = new Image();
+    baseImg.onload = ()=>{
+      const overlay = document.createElement("div");
+      overlay.className = "scan-bg";
+      overlay.innerHTML = `
+        <div class="scan-stage" id="scn-stage">
+          <canvas id="scn-canvas"></canvas>
+          <svg id="scn-svg" width="100%" height="100%">
+            <defs>
+              <mask id="scn-mask">
+                <rect width="100%" height="100%" fill="white"/>
+                <polygon id="scn-poly" fill="black"/>
+              </mask>
+            </defs>
+            <rect width="100%" height="100%" fill="rgba(0,0,0,0.55)" mask="url(#scn-mask)"/>
+            <polygon id="scn-outline" fill="none" stroke="var(--tint)" stroke-width="2"/>
+          </svg>
+          <div class="scan-corner" data-i="0" id="c0"></div>
+          <div class="scan-corner" data-i="1" id="c1"></div>
+          <div class="scan-corner" data-i="2" id="c2"></div>
+          <div class="scan-corner" data-i="3" id="c3"></div>
+          <div class="scan-hint">גרור את 4 הפינות כך שיתאימו לקצוות הכרטיס</div>
+          <div class="scan-progress" id="scn-progress" style="display:none">
+            <div class="loader"></div>
+            <div style="color:#fff;margin-top:14px;font-size:15px">מעבד...</div>
+          </div>
+        </div>
+        <div class="scan-bar">
+          <button class="scan-btn" id="scn-cancel" style="background:transparent;color:#fff;border:none;font-size:16px;padding:8px 14px">ביטול</button>
+          <div class="scan-filters">
+            <button class="scan-flt active" data-flt="document" style="flex:1;padding:8px 12px;background:transparent;color:#fff;border:none;border-radius:8px;font-size:13px">מסמך</button>
+            <button class="scan-flt" data-flt="color" style="flex:1;padding:8px 12px;background:transparent;color:#fff;border:none;border-radius:8px;font-size:13px">צבע מקורי</button>
+          </div>
+          <button class="scan-btn primary" id="scn-ok" style="background:var(--tint);color:#fff;border:none;font-size:16px;padding:9px 18px;border-radius:9px;font-weight:600">סרוק</button>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+
+      /* Layout canvas to stage */
+      const stage  = overlay.querySelector("#scn-stage");
+      const canvas = overlay.querySelector("#scn-canvas");
+      const ctx    = canvas.getContext("2d");
+      const svg    = overlay.querySelector("#scn-svg");
+      const poly   = overlay.querySelector("#scn-poly");
+      const outline= overlay.querySelector("#scn-outline");
+      const progress = overlay.querySelector("#scn-progress");
+
+      let imgX=0, imgY=0, imgW=0, imgH=0; /* rendered image bounds inside stage */
+      let pts = [{x:.1,y:.1},{x:.9,y:.1},{x:.9,y:.9},{x:.1,y:.9}]; /* in image-relative [0..1] */
+      let filterMode = "document";
+
+      function fitImage(){
+        const sw = stage.clientWidth, sh = stage.clientHeight;
+        const ar = baseImg.width / baseImg.height;
+        let w = sw, h = sw/ar;
+        if (h > sh){ h = sh; w = sh*ar; }
+        imgW = w; imgH = h;
+        imgX = (sw - w)/2; imgY = (sh - h)/2;
+        canvas.width = baseImg.width;
+        canvas.height = baseImg.height;
+        canvas.style.position = "absolute";
+        canvas.style.left = imgX+"px";
+        canvas.style.top  = imgY+"px";
+        canvas.style.width = w+"px";
+        canvas.style.height = h+"px";
+        ctx.drawImage(baseImg, 0, 0);
+        redraw();
+      }
+
+      function ptToStage(p){
+        return { x: imgX + p.x*imgW, y: imgY + p.y*imgH };
+      }
+
+      function redraw(){
+        const stagePts = pts.map(ptToStage);
+        const polyStr = stagePts.map(p=>`${p.x},${p.y}`).join(" ");
+        poly.setAttribute("points", polyStr);
+        outline.setAttribute("points", polyStr);
+        for (let i=0;i<4;i++){
+          const el = overlay.querySelector("#c"+i);
+          el.style.left = stagePts[i].x + "px";
+          el.style.top  = stagePts[i].y + "px";
+        }
+      }
+
+      /* Pointer drag for corners */
+      let active = null;
+      for (let i=0;i<4;i++){
+        const el = overlay.querySelector("#c"+i);
+        el.addEventListener("pointerdown", e=>{
+          e.preventDefault();
+          active = i;
+          el.classList.add("dragging");
+          try { el.setPointerCapture(e.pointerId); } catch(_){}
+        });
+        el.addEventListener("pointermove", e=>{
+          if (active !== i) return;
+          e.preventDefault();
+          const rect = stage.getBoundingClientRect();
+          const sx = e.clientX - rect.left;
+          const sy = e.clientY - rect.top;
+          let rx = (sx - imgX) / imgW;
+          let ry = (sy - imgY) / imgH;
+          rx = Math.max(0, Math.min(1, rx));
+          ry = Math.max(0, Math.min(1, ry));
+          pts[i].x = rx; pts[i].y = ry;
+          redraw();
+        });
+        const release = e=>{
+          if (active !== i) return;
+          active = null;
+          el.classList.remove("dragging");
+          try { el.releasePointerCapture(e.pointerId); } catch(_){}
+        };
+        el.addEventListener("pointerup", release);
+        el.addEventListener("pointercancel", release);
+      }
+
+      /* Filter buttons */
+      overlay.querySelectorAll(".scan-flt").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          overlay.querySelectorAll(".scan-flt").forEach(b=>{
+            b.classList.remove("active");
+            b.style.background = "transparent";
+          });
+          btn.classList.add("active");
+          btn.style.background = "rgba(255,255,255,0.20)";
+          filterMode = btn.dataset.flt;
+        });
+      });
+      /* initial active style */
+      const dflt = overlay.querySelector('.scan-flt[data-flt="document"]');
+      if (dflt) dflt.style.background = "rgba(255,255,255,0.20)";
+
+      function close(result){
+        try { document.body.removeChild(overlay); } catch(_){}
+        window.removeEventListener("resize", fitImage);
+        resolve(result);
+      }
+
+      overlay.querySelector("#scn-cancel").addEventListener("click", ()=>close(null));
+
+      overlay.querySelector("#scn-ok").addEventListener("click", async ()=>{
+        progress.style.display = "flex";
+        await new Promise(r=>setTimeout(r, 30)); /* let UI paint */
+        try {
+          const W = baseImg.width, H = baseImg.height;
+          const srcPts = pts.map(p=>({ x: p.x*W, y: p.y*H }));
+          /* Compute output size from average of opposing edges */
+          const dist = (a,b)=>Math.hypot(a.x-b.x, a.y-b.y);
+          const widthTop    = dist(srcPts[0], srcPts[1]);
+          const widthBot    = dist(srcPts[3], srcPts[2]);
+          const heightLeft  = dist(srcPts[0], srcPts[3]);
+          const heightRight = dist(srcPts[1], srcPts[2]);
+          let outW = Math.round((widthTop + widthBot)/2);
+          let outH = Math.round((heightLeft + heightRight)/2);
+          /* Cap output dim */
+          const MAX = 1400;
+          if (outW > MAX || outH > MAX){
+            const k = MAX / Math.max(outW, outH);
+            outW = Math.round(outW*k);
+            outH = Math.round(outH*k);
+          }
+          if (outW < 100 || outH < 100){
+            progress.style.display = "none";
+            alert("בחר אזור גדול יותר");
+            return;
+          }
+          const dstPts = [
+            {x:0, y:0},
+            {x:outW, y:0},
+            {x:outW, y:outH},
+            {x:0, y:outH}
+          ];
+          const Hmat = computeHomography(srcPts, dstPts);
+          if (!Hmat){
+            progress.style.display = "none";
+            alert("שגיאת חישוב — נסה לסדר את הפינות מחדש");
+            return;
+          }
+          const srcData = ctx.getImageData(0, 0, W, H);
+          const outData = applyHomography(srcData, Hmat, outW, outH);
+          if (!outData){
+            progress.style.display = "none";
+            alert("שגיאת עיבוד");
+            return;
+          }
+          if (filterMode === "document") filterDocument(outData);
+          const oc = document.createElement("canvas");
+          oc.width = outW; oc.height = outH;
+          oc.getContext("2d").putImageData(outData, 0, 0);
+          const dataURL = oc.toDataURL("image/jpeg", 0.88);
+          close(dataURL);
+        } catch(err){
+          console.error(err);
+          progress.style.display = "none";
+          alert("שגיאה בעיבוד");
+        }
+      });
+
+      window.addEventListener("resize", fitImage);
+      requestAnimationFrame(fitImage);
+    };
+    baseImg.onerror = ()=>resolve(null);
+    baseImg.src = baseDataURL;
   });
 }
 
@@ -1348,15 +2009,21 @@ async function renderSessionStart(){
   const app = byId("app");
   app.innerHTML = `
     <div class="list-section">
-      <div class="list-section-header">תמונת כרטיס ביקור</div>
+      <div class="list-section-header">סריקת כרטיס ביקור</div>
       <div class="bigphoto" id="card-slot">
         <div class="add-block">
-          <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>
-          <span>צלם / בחר תמונה</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7V5a2 2 0 0 1 2-2h2"/>
+            <path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+            <path d="M21 17v2a2 2 0 0 1-2 2h-2"/>
+            <path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
+            <path d="M7 12h10"/>
+          </svg>
+          <span>סרוק כרטיס ביקור</span>
         </div>
         <input type="file" accept="image/*" capture="environment" id="card-input">
       </div>
-      <div class="list-section-footer">אופציונלי. אם לא, אפשר להמשיך ישר למוצרים.</div>
+      <div class="list-section-footer">אופציונלי. צלם את הכרטיס וגרור את 4 הפינות ליישור.</div>
     </div>
 
     <div class="list-section">
@@ -1392,12 +2059,32 @@ async function renderSessionStart(){
   `;
 
   let cardImg = null;
+  const emptyCardHTML = `
+    <div class="add-block">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 7V5a2 2 0 0 1 2-2h2"/>
+        <path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+        <path d="M21 17v2a2 2 0 0 1-2 2h-2"/>
+        <path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
+        <path d="M7 12h10"/>
+      </svg>
+      <span>סרוק כרטיס ביקור</span>
+    </div>
+    <input type="file" accept="image/*" capture="environment" id="card-input">
+  `;
   function bindCardSlot(){
     const slot = $("#card-slot"), inp = $("#card-input");
     inp.addEventListener("change", async e=>{
       const f = e.target.files[0];
       if (!f) return;
-      cardImg = await resizePhoto(f, 1600, .85);
+      /* Reset input so re-selecting same file fires change */
+      try { inp.value = ""; } catch(_){}
+      const scanned = await scanDocument(f);
+      if (!scanned){
+        /* Cancelled — keep slot empty */
+        return;
+      }
+      cardImg = scanned;
       slot.classList.add("has");
       slot.innerHTML = `
         <img src="${cardImg}">
@@ -1408,13 +2095,7 @@ async function renderSessionStart(){
         e.preventDefault(); e.stopPropagation();
         cardImg = null;
         slot.classList.remove("has");
-        slot.innerHTML = `
-          <div class="add-block">
-            <svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/></svg>
-            <span>צלם / בחר תמונה</span>
-          </div>
-          <input type="file" accept="image/*" capture="environment" id="card-input">
-        `;
+        slot.innerHTML = emptyCardHTML;
         bindCardSlot();
       });
       bindCardSlot();
